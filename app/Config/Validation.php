@@ -116,11 +116,18 @@ class Validation
 	];
 
 	public $penjualan = [
-		'produk' => [
-			'rules' => 'required|integer',
+		'id' => [
+			'rules' => 'required|alpha_numeric',
 			'errors' => [
 				'required' => 'Wajib diisi',
-				'integer' => 'Field harus integer'
+				'alpha_numeric' => 'Field harus alpha numeric'
+			]
+		],
+		'produk' => [
+			'rules' => 'required|alpha_numeric',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'alpha_numeric' => 'Field harus alphanumeric'
 			]
 		],
 		'satuan' => [
@@ -143,7 +150,7 @@ class Validation
 				'required' => 'Wajib diisi',
 				'integer' => 'Field harus integer'
 			]
-		],
+		]
 	];
 
 	//--------------------------------------------------------------------

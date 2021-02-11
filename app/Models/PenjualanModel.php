@@ -10,6 +10,8 @@ class PenjualanModel extends Model
     protected $primarykey = 'id';
     protected $useTimestamps = true;
     protected $createdField  = 'tanggal_jual';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
     protected $returnType     = 'object';
     protected $allowedFields = ['id_produk', 'id_satuan', 'qty', 'total_jual'];
 

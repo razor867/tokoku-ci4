@@ -40,11 +40,20 @@ class Penjualan extends BaseController
         $satuan = $this->request->getPost('satuan');
         $qty = $this->request->getPost('qty');
         $total_jual = $this->request->getpost('total_jual');
+        $id = $this->request->getpost('id');
+
         $this->m_penjualan->save([
             'id_produk' => $produk,
             'id_satuan' => $satuan,
             'qty' => $qty,
             'total_jual' => $total_jual
+        ]);
+
+        $dataProduk = $this->m_produk->find($id);
+        $update_stok = $dataProduk->stok - $qty;
+
+        $this->m_produk->update($id, [
+            'stok' => $update_stok
         ]);
 
         session()->setFlashdata('info', 'Data berhasil disimpan');
@@ -54,7 +63,7 @@ class Penjualan extends BaseController
     public function getRowPenjualan()
     {
         $id = $this->request->getPost('id');
-        $query = $this->m_produk->find($id);
+        $query = $this->m_penjualan->find($id);
         echo json_encode($query);
     }
 
@@ -86,10 +95,10 @@ class Penjualan extends BaseController
     {
         if (!preg_match('/^[a-zA-Z0-9_]*$/', $id)) {
             session()->setFlashdata('info', 'error');
-            return redirect()->to('/product');
+            return redirect()->to('/penjualan');
         }
-        $this->m_produk->delete($id);
+        $this->m_penjualan->delete($id);
         session()->setFlashdata('info', 'Data berhasil di hapus');
-        return redirect()->to('/product');
+        return redirect()->to('/penjualan');
     }
 }

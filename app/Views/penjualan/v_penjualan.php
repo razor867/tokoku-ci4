@@ -27,6 +27,7 @@
                             <th>Qty</th>
                             <th>Total Jual</th>
                             <th>Tanggal</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -36,6 +37,7 @@
                             <th>Qty</th>
                             <th>Total Jual</th>
                             <th>Tanggal</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -48,11 +50,11 @@
                         ?>
                         <?php foreach ($penjualan as $p) : ?>
                             <tr>
-                                <td><?= $p->nama_produk ?><br><?= ($p->stok > 0) ? '<span class="badge badge-success">Tersedia</span>' : '<span class="badge badge-secondary">Kosong</span>' ?></td>
+                                <td><?= $p->nama_produk ?></td>
                                 <td><?= $p->nama_satuan ?></td>
-                                <td><?= $P->qty ?></td>
-                                <td><?= $P->total_jual ?></td>
-                                <td><?= $p->tanggal ?></td>
+                                <td><?= $p->qty ?></td>
+                                <td><?= rupiah($p->total_jual) ?></td>
+                                <td><?= $p->tanggal_jual ?></td>
                                 <td>
                                     <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
                                         <i class="fas fa-exclamation-triangle"></i>
@@ -88,10 +90,15 @@
                         <input type="hidden" name="id" id="id">
                         <div class="col-md-6 mb-3">
                             <label for="produk">Nama Produk</label>
-                            <select name="produk" id="produk" class="form-control <?= ($validation->hasError('produk') ? 'is-invalid' : '') ?>" required autofocus>
-                                <option value="">Pilih Produk</option>
+                            <select name="produk" id="produk" class="form-control sc_select <?= ($validation->hasError('produk') ? 'is-invalid' : '') ?>" required autofocus>
+                                <option value=""></option>
                                 <?php foreach ($produk as $s) : ?>
                                     <option value="<?= $s->id ?>"><?= $s->nama_produk ?><small> (<?= $s->nama_category ?>)</small></option>
+                                    <script>
+                                        data_idProduk.push("<?= $s->id ?>");
+                                        data_hargaProduk.push("<?= $s->harga ?>");
+                                        data_stok.push("<?= $s->stok ?>");
+                                    </script>
                                 <?php endforeach ?>
                             </select>
                             <div class="invalid-feedback">
@@ -100,8 +107,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="satuan">Satuan</label>
-                            <select name="satuan" id="satuan" class="form-control <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
-                                <option value="">Pilih Satuan</option>
+                            <select name="satuan" id="satuan" class="form-control sc_select <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
+                                <option value=""></option>
                                 <?php foreach ($satuan as $s) : ?>
                                     <option value="<?= $s->id ?>"><?= $s->nama_satuan ?></option>
                                 <?php endforeach ?>
@@ -115,13 +122,14 @@
                         <div class="col-md-6 mb-3">
                             <label for="qty">Qty</label>
                             <input type="number" class="form-control <?= ($validation->hasError('qty') ? 'is-invalid' : '') ?>" id="qty" name="qty" required autofocus value="<?= old('qty') ?>">
+                            <br><small class="info_stok"></small>
                             <div class="invalid-feedback">
                                 <?= $validation->getError('qty') ?>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="total_jual">Total Jual</label>
-                            <input type="number" class="form-control <?= ($validation->hasError('total_jual') ? 'is-invalid' : '') ?>" id="total_jual" name="total_jual" required autofocus value="<?= old('total_jual') ?>">
+                            <input type="number" class="form-control <?= ($validation->hasError('total_jual') ? 'is-invalid' : '') ?>" id="total_jual" name="total_jual" required autofocus value="<?= old('total_jual') ?>" readonly>
                             <div class="invalid-feedback">
                                 <?= $validation->getError('total_jual') ?>
                             </div>
@@ -143,6 +151,11 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="/path/to/select2.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+<script>
+    var data_idProduk = [],
+        data_stok = [],
+        data_hargaProduk = [];
+</script>
 <?= $this->endSection() ?>
 
 <?= $this->section('js_plugins') ?>
@@ -160,10 +173,11 @@
             $('.submit_btn').text('Add');
             $('form').attr('action', '<?= base_url("penjualan/addPenjualan") ?>');
             if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#produk').val('');
-                $('#satuan').val('');
+                $('#produk').val('').trigger('change');
+                $('#satuan').val('').trigger('change');
                 $('#qty').val('');
                 $('#total_jual').val('');
+                $('#id').val('');
             }
         })
 
@@ -173,16 +187,15 @@
             $('form').attr('action', '<?= base_url("penjualan/editPenjualan") ?>');
             $('#id').val($(this).attr('data'));
             $.ajax({
-                url: '<?= base_url("product/getRowPenjualan") ?>',
+                url: '<?= base_url("penjualan/getRowPenjualan") ?>',
                 data: {
                     id: $(this).attr('data'),
                 },
                 method: 'post',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
-                    $('#produk').val(data.produk);
-                    $('#satuan').val(data.satuan);
+                    $('#produk').val(data.id_produk).trigger('change');
+                    $('#satuan').val(data.id_satuan).trigger('change');
                     $('#qty').val(data.qty);
                     $('#total_jual').val(data.total_jual);
                 }
@@ -190,11 +203,25 @@
         })
 
         $('.transaksi').click();
-        $('select').select2({
+        $('.sc_select').select2({
             theme: 'bootstrap4',
             placeholder: "Pilih",
             allowClear: true
         });
+
+        $('#produk').change(function() {
+            var index = data_idProduk.indexOf($(this).val());
+            $('#qty').val('1');
+            $('#total_jual').val(data_hargaProduk[index]);
+            $('#id').val($(this).val());
+            $('.info_stok').html('<i class="fas fa-info-circle"></i> Stok produk saat ini : ' + data_stok[index]);
+        });
+
+        $('#qty').change(function() {
+            var original_price = $('#total_jual').val();
+            var total_price = original_price * $(this).val();
+            $('#total_jual').val(total_price);
+        })
     })
 </script>
 <?= $this->endSection() ?>

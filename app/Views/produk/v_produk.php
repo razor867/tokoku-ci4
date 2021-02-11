@@ -97,8 +97,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="category">Category</label>
-                            <select name="category" id="category" class="form-control <?= ($validation->hasError('category') ? 'is-invalid' : '') ?>" required autofocus>
-                                <option value="">Pilih Category</option>
+                            <select name="category" id="category" class="form-control sc_select <?= ($validation->hasError('category') ? 'is-invalid' : '') ?>" required autofocus>
+                                <option value=""></option>
                                 <?php foreach ($cat_produk as $cp) : ?>
                                     <option value="<?= $cp->id ?>"><?= $cp->nama_category ?></option>
                                 <?php endforeach ?>
@@ -111,8 +111,8 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="satuan">Satuan</label>
-                            <select name="satuan" id="satuan" class="form-control <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
-                                <option value="">Pilih Satuan</option>
+                            <select name="satuan" id="satuan" class="form-control sc_select <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
+                                <option value=""></option>
                                 <?php foreach ($satuan as $s) : ?>
                                     <option value="<?= $s->id ?>"><?= $s->nama_satuan ?></option>
                                 <?php endforeach ?>
@@ -201,7 +201,7 @@
 
         })
 
-        $('select').select2({
+        $('.sc_select').select2({
             theme: 'bootstrap4',
             placeholder: "Pilih",
             allowClear: true
