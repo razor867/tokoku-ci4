@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\PenjualanModel;
 use App\Models\ProdukModel;
 use App\Models\SatuanModel;
+use CodeIgniter\I18n\Time;
 
 class Penjualan extends BaseController
 {
@@ -40,24 +41,30 @@ class Penjualan extends BaseController
         $satuan = $this->request->getPost('satuan');
         $qty = $this->request->getPost('qty');
         $total_jual = $this->request->getpost('total_jual');
-        $id = $this->request->getpost('id');
+        $time = new Time('now', 'Asia/Jakarta', 'id_ID');
+        $time = date_format($time, 'd/m/Y H:i:s');
 
-        $this->m_penjualan->save([
+        $data = [
             'id_produk' => $produk,
             'id_satuan' => $satuan,
             'qty' => $qty,
-            'total_jual' => $total_jual
-        ]);
+            'total_jual' => $total_jual,
+            'tanggal_jual' => $time
+        ];
 
-        $dataProduk = $this->m_produk->find($id);
-        $update_stok = $dataProduk->stok - $qty;
-
-        $this->m_produk->update($id, [
-            'stok' => $update_stok
-        ]);
-
-        session()->setFlashdata('info', 'Data berhasil disimpan');
-        return redirect()->to('/penjualan');
+        $dataProduk = $this->m_produk->find($produk);
+        if ($dataProduk->stok < 1 || $dataProduk->stok < $qty) {
+            session()->setFlashdata('info', 'error_stok');
+            return redirect()->to('/penjualan');
+        } else {
+            $this->m_penjualan->addDataPenjualan($data);
+            $update_stok = $dataProduk->stok - $qty;
+            $this->m_produk->update($produk, [
+                'stok' => $update_stok
+            ]);
+            session()->setFlashdata('info', 'Data berhasil disimpan');
+            return redirect()->to('/penjualan');
+        }
     }
 
     public function getRowPenjualan()

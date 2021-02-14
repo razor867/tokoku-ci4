@@ -93,7 +93,7 @@
                             <select name="produk" id="produk" class="form-control sc_select <?= ($validation->hasError('produk') ? 'is-invalid' : '') ?>" required autofocus>
                                 <option value=""></option>
                                 <?php foreach ($produk as $s) : ?>
-                                    <option value="<?= $s->id ?>"><?= $s->nama_produk ?><small> (<?= $s->nama_category ?>)</small></option>
+                                    <option value="<?= $s->id ?>" <?= (old('produk') == $s->id ? 'selected' : '') ?>><?= $s->nama_produk ?><small> (<?= $s->nama_category ?>)</small></option>
                                     <script>
                                         data_idProduk.push("<?= $s->id ?>");
                                         data_hargaProduk.push("<?= $s->harga ?>");
@@ -110,7 +110,7 @@
                             <select name="satuan" id="satuan" class="form-control sc_select <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
                                 <option value=""></option>
                                 <?php foreach ($satuan as $s) : ?>
-                                    <option value="<?= $s->id ?>"><?= $s->nama_satuan ?></option>
+                                    <option value="<?= $s->id ?>" <?= (old('satuan') == $s->id ? 'selected' : '') ?>><?= $s->nama_satuan ?></option>
                                 <?php endforeach ?>
                             </select>
                             <div class="invalid-feedback">
@@ -121,18 +121,19 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="qty">Qty</label>
-                            <input type="number" class="form-control <?= ($validation->hasError('qty') ? 'is-invalid' : '') ?>" id="qty" name="qty" required autofocus value="<?= old('qty') ?>">
-                            <br><small class="info_stok"></small>
+                            <input type="number" class="form-control <?= ($validation->hasError('qty') ? 'is-invalid' : '') ?>" id="qty" name="qty" min="1" required autofocus value="<?= old('qty') ?>">
                             <div class="invalid-feedback">
                                 <?= $validation->getError('qty') ?>
                             </div>
+                            <small class="info_stok"></small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="total_jual">Total Jual</label>
-                            <input type="number" class="form-control <?= ($validation->hasError('total_jual') ? 'is-invalid' : '') ?>" id="total_jual" name="total_jual" required autofocus value="<?= old('total_jual') ?>" readonly>
+                            <input type="number" class="form-control <?= ($validation->hasError('total_jual') ? 'is-invalid' : '') ?>" id="total_jual" name="total_jual" min="1" required autofocus value="<?= old('total_jual') ?>" data-a-sign="Rp. " data-a-dec="," data-a-sep="." readonly>
                             <div class="invalid-feedback">
                                 <?= $validation->getError('total_jual') ?>
                             </div>
+                            <i><small class="written_nominal"></small></i>
                         </div>
                     </div>
             </div>
@@ -149,7 +150,6 @@
 <?= $this->section('css_custom') ?>
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="/path/to/select2.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
 <script>
     var data_idProduk = [],
@@ -162,13 +162,36 @@
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/js/autoNumeric/autoNumeric.js"></script>
+<script src="/js/numToWord/numToWord.js"></script>
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="js/demo/datatables-demo.js"></script>
+<script src="/js/demo/datatables-demo.js"></script>
 <script>
+    var tempQty = $('#qty').val();
+    $('#total_jual').autoNumeric('init');
+
+    function forQty(qty) {
+        if (qty < 1) {
+            $('#qty').val('1');
+            $('#total_jual').val(original_price);
+        } else {
+            $('#total_jual').val('');
+            tempQty = qty;
+            total_price = original_price * qty;
+        }
+        $('#total_jual').val(total_price);
+        $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
+        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
+        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
+    }
+
     $(document).ready(function() {
+
         $('.add').click(function() {
+            tempQty = 0;
+            $('.written_nominal').empty();
             $('.modal-title').text('Tambah Penjualan');
             $('.submit_btn').text('Add');
             $('form').attr('action', '<?= base_url("penjualan/addPenjualan") ?>');
@@ -179,10 +202,12 @@
                 $('#total_jual').val('');
                 $('#id').val('');
             }
-        })
+            $('.info_stok').empty();
+        });
 
         $('.edit').click(function() {
-            $('.modal-title').text('Edit Produk');
+            tempQty = 0;
+            $('.modal-title').text('Edit Penjualan');
             $('.submit_btn').text('Edit');
             $('form').attr('action', '<?= base_url("penjualan/editPenjualan") ?>');
             $('#id').val($(this).attr('data'));
@@ -198,9 +223,10 @@
                     $('#satuan').val(data.id_satuan).trigger('change');
                     $('#qty').val(data.qty);
                     $('#total_jual').val(data.total_jual);
+                    $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
                 }
             })
-        })
+        });
 
         $('.transaksi').click();
         $('.sc_select').select2({
@@ -209,19 +235,27 @@
             allowClear: true
         });
 
+        $('#qty').change(function() {
+            forQty($(this).val());
+        });
+
+        $('#qty').keyup(function() {
+            forQty($(this).val());
+        });
+
         $('#produk').change(function() {
             var index = data_idProduk.indexOf($(this).val());
             $('#qty').val('1');
+            tempQty = $('#qty').val();
             $('#total_jual').val(data_hargaProduk[index]);
+            original_price = $('#total_jual').val();
             $('#id').val($(this).val());
             $('.info_stok').html('<i class="fas fa-info-circle"></i> Stok produk saat ini : ' + data_stok[index]);
+            $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
         });
 
-        $('#qty').change(function() {
-            var original_price = $('#total_jual').val();
-            var total_price = original_price * $(this).val();
-            $('#total_jual').val(total_price);
-        })
+        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
+        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
     })
 </script>
 <?= $this->endSection() ?>

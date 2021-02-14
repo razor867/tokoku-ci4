@@ -4,17 +4,17 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Produk</h1>
+    <h1 class="h3 mb-4 text-gray-800">Pembelian</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary d-inline">Daftar Produk</h6>
-            <a href="#" class="btn btn-primary btn-icon-split float-right add" data-toggle="modal" data-target="#product_modal">
+            <h6 class="m-0 font-weight-bold text-primary d-inline">Daftar Pembelian</h6>
+            <a href="#" class="btn btn-primary btn-icon-split float-right add" data-toggle="modal" data-target="#pembelian_modal">
                 <span class="icon text-white-50">
                     <i class="fas fa-flag"></i>
                 </span>
-                <span class="text">Add Produk</span>
+                <span class="text">Add Pembelian</span>
             </a>
         </div>
         <div class="card-body">
@@ -23,20 +23,20 @@
                     <thead>
                         <tr>
                             <th>Produk</th>
-                            <th>Kategori</th>
                             <th>Satuan</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
+                            <th>Qty</th>
+                            <th>Total Beli</th>
+                            <th>Tanggal</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Produk</th>
-                            <th>Kategori</th>
                             <th>Satuan</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
+                            <th>Qty</th>
+                            <th>Total Beli</th>
+                            <th>Tanggal</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -48,18 +48,18 @@
                             return $hasil_rupiah;
                         }
                         ?>
-                        <?php foreach ($produk as $p) : ?>
+                        <?php foreach ($pembelian as $p) : ?>
                             <tr>
-                                <td><?= $p->nama_produk ?><br><?= ($p->stok > 0) ? '<span class="badge badge-success">Tersedia</span>' : '<span class="badge badge-secondary">Kosong</span>' ?></td>
-                                <td><?= $p->nama_category ?></td>
+                                <td><?= $p->nama_produk ?></td>
                                 <td><?= $p->nama_satuan ?></td>
-                                <td><?= rupiah($p->harga) ?></td>
-                                <td><?= $p->stok ?></td>
+                                <td><?= $p->qty ?></td>
+                                <td><?= rupiah($p->total_beli) ?></td>
+                                <td><?= $p->tanggal_beli ?></td>
                                 <td>
-                                    <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#product_modal" title="Edit">
+                                    <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#pembelian_modal" title="Edit">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </a>
-                                    <a href="/product/deleteProduct/<?= $p->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
+                                    <a href="/pembelian/deletePembelian/<?= $p->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -75,7 +75,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_cutom') ?>
-<div class="modal fade" id="product_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="pembelian_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -89,26 +89,17 @@
                     <div class="form-row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-md-6 mb-3">
-                            <label for="nama_produk">Nama Produk</label>
-                            <input type="text" class="form-control <?= ($validation->hasError('nama_produk') ? 'is-invalid' : '') ?>" id="nama_produk" name="nama_produk" required autofocus value="<?= old('nama_produk') ?>">
-                            <div class="invalid-feedback">
-                                <?= $validation->getError('nama_produk') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="category">Category</label>
-                            <select name="category" id="category" class="form-control sc_select <?= ($validation->hasError('category') ? 'is-invalid' : '') ?>" required autofocus>
+                            <label for="produk">Nama Produk</label>
+                            <select name="produk" id="produk" class="form-control sc_select <?= ($validation->hasError('produk') ? 'is-invalid' : '') ?>" required autofocus>
                                 <option value=""></option>
-                                <?php foreach ($cat_produk as $cp) : ?>
-                                    <option value="<?= $cp->id ?>" <?= (old('category') == $cp->id ? 'selected' : '') ?>><?= $cp->nama_category ?></option>
+                                <?php foreach ($produk as $s) : ?>
+                                    <option value="<?= $s->id ?>" <?= (old('produk') == $s->id ? 'selected' : '') ?>><?= $s->nama_produk ?><small> (<?= $s->nama_category ?>)</small></option>
                                 <?php endforeach ?>
                             </select>
                             <div class="invalid-feedback">
-                                <?= $validation->getError('category') ?>
+                                <?= $validation->getError('produk') ?>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="satuan">Satuan</label>
                             <select name="satuan" id="satuan" class="form-control sc_select <?= ($validation->hasError('satuan') ? 'is-invalid' : '') ?>" required autofocus>
@@ -121,21 +112,24 @@
                                 <?= $validation->getError('satuan') ?>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="col-md-6 mb-3">
-                            <label for="stok">Stok</label>
-                            <input type="number" class="form-control <?= ($validation->hasError('stok') ? 'is-invalid' : '') ?>" id="stok" name="stok" min="0" required autofocus value="<?= old('stok') ?>">
+                            <label for="qty">Qty</label>
+                            <input type="number" class="form-control <?= ($validation->hasError('qty') ? 'is-invalid' : '') ?>" id="qty" name="qty" min="1" required autofocus value="<?= old('qty') ?>">
+                            <br><small class="info_stok"></small>
                             <div class="invalid-feedback">
-                                <?= $validation->getError('stok') ?>
+                                <?= $validation->getError('qty') ?>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="harga">Harga</label>
-                        <input type="number" class="form-control <?= ($validation->hasError('harga') ? 'is-invalid' : '') ?>" id="harga" name="harga" min="0" required autofocus value="<?= old('harga') ?>">
-                        <div class="invalid-feedback">
-                            <?= $validation->getError('harga') ?>
+                        <div class="col-md-6 mb-3">
+                            <label for="total_beli">Total Beli</label>
+                            <input type="number" class="form-control <?= ($validation->hasError('total_beli') ? 'is-invalid' : '') ?>" id="total_beli" name="total_beli" min="1" required autofocus value="<?= old('total_beli') ?>">
+                            <div class="invalid-feedback">
+                                <?= $validation->getError('total_beli') ?>
+                            </div>
+                            <i><small class="written_nominal"></small></i>
                         </div>
-                        <i><small class="written_nominal"></small></i>
                     </div>
             </div>
             <div class="modal-footer">
@@ -158,6 +152,7 @@
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="js/autoNumeric/autoNumeric.js"></script>
 <script src="/js/numToWord/numToWord.js"></script>
 <?= $this->endSection() ?>
 
@@ -165,54 +160,55 @@
 <script src="js/demo/datatables-demo.js"></script>
 <script>
     $(document).ready(function() {
+
         $('.add').click(function() {
-            $('.modal-title').text('Tambah Produk');
+            $('.modal-title').text('Tambah Pembelian');
             $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("product/addProduct") ?>');
+            $('form').attr('action', '<?= base_url("pembelian/addPembelian") ?>');
             if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#nama_produk').val('');
-                $('#category').val('').trigger('change');
+                $('#produk').val('').trigger('change');
                 $('#satuan').val('').trigger('change');
-                $('#stok').val('');
-                $('#harga').val('');
-                $('.written_nominal').html('');
+                $('#qty').val('');
+                $('#total_beli').val('');
+                $('#id').val('');
+                $('.written_nominal').empty();
             }
         })
 
         $('.edit').click(function() {
-            $('.modal-title').text('Edit Produk');
+            $('.modal-title').text('Edit Pembelian');
             $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("product/editProduct") ?>');
+            $('form').attr('action', '<?= base_url("pembelian/editPembelian") ?>');
             $('#id').val($(this).attr('data'));
             $.ajax({
-                url: '<?= base_url("product/getRowProduct") ?>',
+                url: '<?= base_url("pembelian/getRowPembelian") ?>',
                 data: {
                     id: $(this).attr('data'),
                 },
                 method: 'post',
                 dataType: 'json',
                 success: function(data) {
-                    $('#nama_produk').val(data.nama_produk);
-                    $('#category').val(data.id_cat_produk).trigger('change');
+                    $('#produk').val(data.id_produk).trigger('change');
                     $('#satuan').val(data.id_satuan).trigger('change');
-                    $('#stok').val(data.stok);
-                    $('#harga').val(data.harga);
-                    $('.written_nominal').text('*' + convert($('#harga').val()) + ' rupiah*');
+                    $('#qty').val(data.qty);
+                    $('#total_beli').val(data.total_beli);
+                    $('.written_nominal').text('*' + convert(data.total_beli) + ' rupiah*');
                 }
             })
         })
 
+        $('.transaksi').click();
         $('.sc_select').select2({
             theme: 'bootstrap4',
             placeholder: "Pilih",
             allowClear: true
         });
 
-        $('#harga').keyup(function() {
-            $('.written_nominal').text('*' + convert($('#harga').val()) + ' rupiah*');
+        $('#total_beli').keyup(function() {
+            $('.written_nominal').text('*' + convert($(this).val()) + ' rupiah*');
             $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
             $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-        });
+        })
 
         $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
         $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));

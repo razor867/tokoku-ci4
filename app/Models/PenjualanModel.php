@@ -8,12 +8,8 @@ class PenjualanModel extends Model
 {
     protected $table = 'penjualan';
     protected $primarykey = 'id';
-    protected $useTimestamps = true;
-    protected $createdField  = 'tanggal_jual';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
     protected $returnType     = 'object';
-    protected $allowedFields = ['id_produk', 'id_satuan', 'qty', 'total_jual'];
+    protected $allowedFields = ['id_produk', 'id_satuan', 'qty', 'total_jual', 'tanggal_jual'];
 
     public function getPenjualan()
     {
@@ -27,15 +23,9 @@ class PenjualanModel extends Model
         return $result->getResult();
     }
 
-    public function addProduk($data)
+    public function addDataPenjualan($data)
     {
         $builder = $this->builder();
         $builder->insert($data);
-    }
-
-    public function getLastID()
-    {
-        $builder = $this->builder();
-        return $builder->countAll();
     }
 }

@@ -153,6 +153,44 @@ class Validation
 		]
 	];
 
+	public $pembelian = [
+		'id' => [
+			'rules' => 'permit_empty|integer',
+			'errors' => [
+				'integer' => 'Field harus integer'
+			]
+		],
+		'produk' => [
+			'rules' => 'required|alpha_numeric',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'alpha_numeric' => 'Field harus alphanumeric'
+			]
+		],
+		'satuan' => [
+			'rules' => 'required|integer',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'integer' => 'Field harus integer'
+			]
+		],
+		'qty' => [
+			'rules' => 'required|integer',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'integer' => 'Field harus integer'
+			]
+		],
+		'total_beli' => [
+			'rules' => 'required|integer',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'integer' => 'Field harus integer'
+			]
+		]
+	];
+
+
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
