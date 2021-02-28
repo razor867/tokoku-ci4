@@ -29,6 +29,17 @@ class Product extends BaseController
         return view('produk/v_produk', $data);
     }
 
+
+    public function listdata()
+    {
+        $request = \Config\Services::request();
+        $list_data = $this->m_produk;
+        $where = ['id !=' => 'P000000'];
+        //Column Order Harus Sesuai Urutan Kolom Pada Header Tabel di bagian View
+        //Awali nama kolom tabel dengan nama tabel->tanda titik->nama kolom seperti pengguna.nama
+        $column_order = array(NULL, 'produk.nama_produk, produk.');
+    }
+
     public function addProduct()
     {
         if (!$this->validate($this->validation->getRuleGroup('produk'))) {

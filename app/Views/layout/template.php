@@ -22,8 +22,8 @@
     <?= $this->renderSection('css_custom') ?>
     <style>
         .bg-gradient-primary {
-            background-color: #444446;
-            background-image: linear-gradient(180deg, #6a6c6f 10%, #363638 100%);
+            background-color: #5a5c69;
+            background-image: linear-gradient(180deg, #5a5c69 10%, #5a5c69 100%);
             background-size: cover;
         }
     </style>
@@ -113,15 +113,15 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+            <li class="nav-item <?= (current_url() == base_url('home/profile')) ? 'active' : '' ?>">
+                <a class="nav-link collapsed" href="/home/profile">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+            <li class="nav-item <?= (current_url() ==  base_url('home/users')) ? 'active' : '' ?>">
+                <a class="nav-link collapsed" href="/home/users">
                     <i class="fas fa-users"></i>
                     <span>Users</span>
                 </a>
@@ -258,7 +258,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_1.svg" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -269,7 +269,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_2.svg" alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -280,7 +280,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_3.svg" alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -310,7 +310,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Wahyu Arya Pambudi</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

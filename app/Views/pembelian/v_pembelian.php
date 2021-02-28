@@ -86,6 +86,7 @@
             </div>
             <div class="modal-body">
                 <form method="post" action="">
+                    <?= csrf_field() ?>
                     <div class="form-row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-md-6 mb-3">
