@@ -405,42 +405,11 @@
     <!-- Page level custom scripts -->
     <?= $this->renderSection('js_custom') ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        //config icon sidebar title
-        $(document).ready(function() {
-            if ($('#accordionSidebar').width() > 223) {
-                $('.sidebar-brand-icon').css('display', 'none');
-            }
-
-            $('#sidebarToggle').click(function() {
-                if ($('#accordionSidebar').width() == 104) {
-                    $('.sidebar-brand-icon').css('display', 'block');
-                } else {
-                    $('.sidebar-brand-icon').css('display', 'none');
-                }
-            })
-
-            $('.delete').click(function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Yakin hapus data ini?',
-                    text: "Kamu tidak akan melihatnya lagi!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location = this.href;
-                    }
-                })
-            })
-        })
-    </script>
+    <script src="js/app.js"></script>
     <?php if (session()->getFlashdata('info') != '') : ?>
         <script>
-            if ('<?= session()->getFlashdata('info') ?>' == 'error') {
+            const infoFlash = '<?= session()->getFlashdata('info') ?>';
+            if (infoFlash == 'error' || infoFlash == 'error_add' || infoFlash == 'error_edit' || infoFlash == 'error_delete') {
                 Swal.fire({
                     icon: 'error',
                     title: 'Terjadi kesalahan...',
@@ -448,7 +417,7 @@
                     showConfirmButton: false,
                     timer: 2500
                 })
-            } else if ('<?= session()->getFlashdata('info') ?>' == 'error_stok') {
+            } else if (infoFlash == 'error_stok') {
                 Swal.fire({
                     icon: 'error',
                     title: 'Terjadi kesalahan...',
@@ -459,7 +428,7 @@
             } else {
                 Swal.fire({
                     icon: 'success',
-                    title: '<?= session()->getFlashdata('info') ?>',
+                    title: infoFlash,
                     showConfirmButton: false,
                     timer: 1500
                 })

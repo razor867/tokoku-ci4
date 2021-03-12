@@ -22,7 +22,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Produk</th>
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Satuan</th>
                             <th>Qty</th>
                             <th>Total Beli</th>
@@ -32,7 +32,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Produk</th>
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Satuan</th>
                             <th>Qty</th>
                             <th>Total Beli</th>
@@ -40,32 +40,7 @@
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                        <?php
-                        function rupiah($angka)
-                        {
-                            $hasil_rupiah = "Rp" . number_format($angka);
-                            return $hasil_rupiah;
-                        }
-                        ?>
-                        <?php foreach ($pembelian as $p) : ?>
-                            <tr>
-                                <td><?= $p->nama_produk ?></td>
-                                <td><?= $p->nama_satuan ?></td>
-                                <td><?= $p->qty ?></td>
-                                <td><?= rupiah($p->total_beli) ?></td>
-                                <td><?= $p->tanggal_beli ?></td>
-                                <td>
-                                    <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#pembelian_modal" title="Edit">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                                    <a href="/pembelian/deletePembelian/<?= $p->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -158,61 +133,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="js/demo/datatables-demo.js"></script>
-<script>
-    $(document).ready(function() {
-
-        $('.add').click(function() {
-            $('.modal-title').text('Tambah Pembelian');
-            $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("pembelian/addPembelian") ?>');
-            if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#produk').val('').trigger('change');
-                $('#satuan').val('').trigger('change');
-                $('#qty').val('');
-                $('#total_beli').val('');
-                $('#id').val('');
-                $('.written_nominal').empty();
-            }
-        })
-
-        $('.edit').click(function() {
-            $('.modal-title').text('Edit Pembelian');
-            $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("pembelian/editPembelian") ?>');
-            $('#id').val($(this).attr('data'));
-            $.ajax({
-                url: '<?= base_url("pembelian/getRowPembelian") ?>',
-                data: {
-                    id: $(this).attr('data'),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#produk').val(data.id_produk).trigger('change');
-                    $('#satuan').val(data.id_satuan).trigger('change');
-                    $('#qty').val(data.qty);
-                    $('#total_beli').val(data.total_beli);
-                    $('.written_nominal').text('*' + convert(data.total_beli) + ' rupiah*');
-                }
-            })
-        })
-
-        $('.transaksi').click();
-        $('.sc_select').select2({
-            theme: 'bootstrap4',
-            placeholder: "Pilih",
-            allowClear: true
-        });
-
-        $('#total_beli').keyup(function() {
-            $('.written_nominal').text('*' + convert($(this).val()) + ' rupiah*');
-            $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-            $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-        })
-
-        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-    })
-</script>
+<script src="js/pembelian_details.js"></script>
 <?= $this->endSection() ?>

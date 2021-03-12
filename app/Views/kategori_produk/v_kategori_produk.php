@@ -17,39 +17,25 @@
                 <span class="text">Add kategori</span>
             </a>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="overflow-y: scroll; height:400px;">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kategori</th>
-                            <th>Deskripsi</th>
+                            <th class="text-wrap w-25">Kategori</th>
+                            <th class="text-wrap w-50">Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
+                    <tbody>
+                    </tbody>
                     <tfoot>
                         <tr>
-                            <th>Kategori</th>
-                            <th>Deskripsi</th>
+                            <th class="text-wrap w-25">Kategori</th>
+                            <th class="text-wrap w-50">Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                        <?php foreach ($cat_produk as $s) : ?>
-                            <tr>
-                                <td><?= $s->nama_category ?></td>
-                                <td><?= $s->deskripsi ?></td>
-                                <td>
-                                    <a href="#" data="<?= $s->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#kategori_produk_modal" title="Edit">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                                    <a href="/kategori_produk/deleteKategori/<?= $s->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -109,39 +95,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="js/demo/datatables-demo.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.add').click(function() {
-            $('.modal-title').text('Tambah Kategori');
-            $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("kategori_produk/addKategori") ?>');
-            if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#kategori').val('');
-                $('#id').val('');
-                $('#deskripsi').val('');
-            }
-        })
-
-        $('.edit').click(function() {
-            $('.modal-title').text('Edit Kategori');
-            $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("kategori_produk/editKategori") ?>');
-            $('#id').val($(this).attr('data'));
-            $.ajax({
-                url: '<?= base_url("kategori_produk/getRowKategori") ?>',
-                data: {
-                    id: $(this).attr('data'),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#kategori').val(data.nama_category);
-                    $('#deskripsi').val(data.deskripsi);
-                }
-            })
-
-        })
-    })
-</script>
+<script src="js/cat_produk_details.js"></script>
 <?= $this->endSection() ?>

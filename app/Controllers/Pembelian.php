@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\PembelianModel;
 use App\Models\ProdukModel;
 use App\Models\SatuanModel;
+use App\Models\Serverside_model;
 use CodeIgniter\I18n\Time;
 
 class Pembelian extends BaseController
@@ -13,6 +14,7 @@ class Pembelian extends BaseController
     protected $m_produk;
     protected $m_satuan;
     protected $validation;
+    protected $serversideModel;
 
     public function __construct()
     {
@@ -20,12 +22,12 @@ class Pembelian extends BaseController
         $this->m_produk = new ProdukModel();
         $this->m_satuan = new SatuanModel();
         $this->validation = \Config\Services::validation();
+        $this->serversideModel = new Serverside_model();
     }
     public function index()
     {
         $data['produk'] = $this->m_produk->getProduk();
         $data['satuan'] = $this->m_satuan->findAll();
-        $data['pembelian'] = $this->m_pembelian->getPembelian();
         $data['title'] = 'Pembelian';
         $data['validation'] = $this->validation;
         return view('pembelian/v_pembelian', $data);
@@ -34,7 +36,7 @@ class Pembelian extends BaseController
     public function addPembelian()
     {
         if (!$this->validate($this->validation->getRuleGroup('pembelian'))) {
-            session()->setFlashdata('info', 'error');
+            session()->setFlashdata('info', 'error_add');
             return redirect()->to('/pembelian')->withInput();
         }
         $produk = $this->request->getPost('produk');
@@ -70,14 +72,10 @@ class Pembelian extends BaseController
     public function editPembelian()
     {
         if (!$this->validate($this->validation->getRuleGroup('pembelian'))) {
-            session()->setFlashdata('info', 'error');
+            session()->setFlashdata('info', 'error_edit');
             return redirect()->to('/pembelian')->withInput();
         }
         $id = $this->request->getPost('id');
-        if (empty($id)) {
-            session()->setFlashdata('info', 'error');
-            return redirect()->to('/pembelian');
-        }
 
         $produk = $this->request->getPost('produk');
         $satuan = $this->request->getPost('satuan');
@@ -90,27 +88,76 @@ class Pembelian extends BaseController
         $stokProduk = $this->m_produk->find($produk);
         $updateStok = $stokProduk->stok - $oldQtyPembelian->qty;
 
-        $this->m_pembelian->update($id, [
-            'id_produk' => $produk,
-            'id_satuan' => $satuan,
-            'qty' => $qty,
-            'total_beli' => $total_beli,
-            'tanggal_beli' => $time
-        ]);
-        $updateStok = $updateStok + $qty;
-        $this->m_produk->update($produk, ['stok' => $updateStok]);
-        session()->setFlashdata('info', 'Data berhasil dirubah');
+        $query = $this->m_pembelian->find($id);
+        if ($query) {
+            $this->m_pembelian->update($id, [
+                'id_produk' => $produk,
+                'id_satuan' => $satuan,
+                'qty' => $qty,
+                'total_beli' => $total_beli,
+                'tanggal_beli' => $time
+            ]);
+            $updateStok = $updateStok + $qty;
+            $this->m_produk->update($produk, ['stok' => $updateStok]);
+            session()->setFlashdata('info', 'Data berhasil dirubah');
+        } else {
+            session()->setFlashdata('info', 'error_edit');
+        }
+
         return redirect()->to('/pembelian');
     }
 
     public function deletePembelian($id)
     {
         if (!preg_match('/^[a-zA-Z0-9_]*$/', $id)) {
-            session()->setFlashdata('info', 'error');
+            session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/pembelian');
         }
-        $this->m_pembelian->delete($id);
-        session()->setFlashdata('info', 'Data berhasil di hapus');
+
+        $query = $this->m_pembelian->find($id);
+        if ($query) {
+            $this->m_pembelian->delete($id);
+            session()->setFlashdata('info', 'Data berhasil di hapus');
+        } else {
+            session()->setFlashdata('info', 'error_delete');
+        }
+
         return redirect()->to('/pembelian');
+    }
+
+    public function listdata()
+    {
+        $column_order = array('nama_produk', 'nama_satuan', 'qty', 'total_beli', 'tanggal_beli', 'id');
+        $column_search = array('nama_produk', 'nama_satuan', 'qty', 'total_beli', 'tanggal_beli');
+        $order = array('tanggal_beli' => 'desc');
+        $list = $this->serversideModel->get_datatables('_data_pembelian', $column_order, $column_search, $order);
+        $data = array();
+        // $no = $this->request->getPost('start');
+        foreach ($list as $lt) {
+            $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#pembelian_modal" title="Edit">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </a>
+                              <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_datpem\',\'' . $lt->id . '\')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                              </a>';
+            $hasil_rupiah = "Rp" . number_format($lt->total_beli);
+
+            $row = array();
+            $row[] = $lt->nama_produk;
+            $row[] = $lt->nama_satuan;
+            $row[] = $lt->qty;
+            $row[] = $hasil_rupiah;
+            $row[] = $lt->tanggal_beli;
+            $row[] = $button_action;
+            $data[] = $row;
+        }
+        $output = array(
+            'draw' => $this->request->getPost('draw'),
+            'recordsTotal' => $this->serversideModel->count_all('_data_pembelian'),
+            'recordsFiltered' => $this->serversideModel->count_filtered('_data_pembelian', $column_order, $column_search, $order),
+            'data' => $data,
+        );
+
+        return json_encode($output);
     }
 }

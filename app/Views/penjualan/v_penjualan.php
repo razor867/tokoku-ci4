@@ -22,7 +22,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Produk</th>
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Satuan</th>
                             <th>Qty</th>
                             <th>Total Jual</th>
@@ -32,7 +32,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Produk</th>
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Satuan</th>
                             <th>Qty</th>
                             <th>Total Jual</th>
@@ -40,32 +40,7 @@
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                        <?php
-                        function rupiah($angka)
-                        {
-                            $hasil_rupiah = "Rp" . number_format($angka);
-                            return $hasil_rupiah;
-                        }
-                        ?>
-                        <?php foreach ($penjualan as $p) : ?>
-                            <tr>
-                                <td><?= $p->nama_produk ?></td>
-                                <td><?= $p->nama_satuan ?></td>
-                                <td><?= $p->qty ?></td>
-                                <td><?= rupiah($p->total_jual) ?></td>
-                                <td><?= $p->tanggal_jual ?></td>
-                                <td>
-                                    <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                                    <a href="/penjualan/deletePenjualan/<?= $p->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -168,95 +143,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="/js/demo/datatables-demo.js"></script>
-<script>
-    var tempQty = $('#qty').val();
-    $('#total_jual').autoNumeric('init');
-
-    function forQty(qty) {
-        if (qty < 1) {
-            $('#qty').val('1');
-            $('#total_jual').val(original_price);
-        } else {
-            $('#total_jual').val('');
-            tempQty = qty;
-            total_price = original_price * qty;
-        }
-        $('#total_jual').val(total_price);
-        $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
-        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-    }
-
-    $(document).ready(function() {
-
-        $('.add').click(function() {
-            tempQty = 0;
-            $('.written_nominal').empty();
-            $('.modal-title').text('Tambah Penjualan');
-            $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("penjualan/addPenjualan") ?>');
-            if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#produk').val('').trigger('change');
-                $('#satuan').val('').trigger('change');
-                $('#qty').val('');
-                $('#total_jual').val('');
-                $('#id').val('');
-            }
-            $('.info_stok').empty();
-        });
-
-        $('.edit').click(function() {
-            tempQty = 0;
-            $('.modal-title').text('Edit Penjualan');
-            $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("penjualan/editPenjualan") ?>');
-            $('#id').val($(this).attr('data'));
-            $.ajax({
-                url: '<?= base_url("penjualan/getRowPenjualan") ?>',
-                data: {
-                    id: $(this).attr('data'),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#produk').val(data.id_produk).trigger('change');
-                    $('#satuan').val(data.id_satuan).trigger('change');
-                    $('#qty').val(data.qty);
-                    $('#total_jual').val(data.total_jual);
-                    $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
-                }
-            })
-        });
-
-        $('.transaksi').click();
-        $('.sc_select').select2({
-            theme: 'bootstrap4',
-            placeholder: "Pilih",
-            allowClear: true
-        });
-
-        $('#qty').change(function() {
-            forQty($(this).val());
-        });
-
-        $('#qty').keyup(function() {
-            forQty($(this).val());
-        });
-
-        $('#produk').change(function() {
-            var index = data_idProduk.indexOf($(this).val());
-            $('#qty').val('1');
-            tempQty = $('#qty').val();
-            $('#total_jual').val(data_hargaProduk[index]);
-            original_price = $('#total_jual').val();
-            $('#id').val($(this).val());
-            $('.info_stok').html('<i class="fas fa-info-circle"></i> Stok produk saat ini : ' + data_stok[index]);
-            $('.written_nominal').text('*' + convert($('#total_jual').val()) + ' rupiah*');
-        });
-
-        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-    })
-</script>
+<script src="/js/penjualan_details.js"></script>
 <?= $this->endSection() ?>

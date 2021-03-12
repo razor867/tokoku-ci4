@@ -18,37 +18,23 @@
             </a>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow-y: scroll; height:400px;">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Satuan</th>
-                            <th>Deskripsi</th>
+                            <th class="text-wrap w-25">Satuan</th>
+                            <th class="text-wrap w-50">Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Satuan</th>
-                            <th>Deskripsi</th>
+                            <th class="text-wrap w-25">Satuan</th>
+                            <th class="text-wrap w-50">Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        <?php foreach ($satuan as $s) : ?>
-                            <tr>
-                                <td><?= $s->nama_satuan ?></td>
-                                <td><?= $s->deskripsi ?></td>
-                                <td>
-                                    <a href="#" data="<?= $s->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#satuan_modal" title="Edit">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                                    <a href="/satuan/deleteSatuan/<?= $s->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
                     </tbody>
                 </table>
             </div>
@@ -109,39 +95,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="js/demo/datatables-demo.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.add').click(function() {
-            $('.modal-title').text('Tambah Satuan');
-            $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("satuan/addSatuan") ?>');
-            if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#satuan').val('');
-                $('#id').val('');
-                $('#deskripsi').val('');
-            }
-        })
-
-        $('.edit').click(function() {
-            $('.modal-title').text('Edit Satuan');
-            $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("satuan/editSatuan") ?>');
-            $('#id').val($(this).attr('data'));
-            $.ajax({
-                url: '<?= base_url("satuan/getRowSatuan") ?>',
-                data: {
-                    id: $(this).attr('data'),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#satuan').val(data.nama_satuan);
-                    $('#deskripsi').val(data.deskripsi);
-                }
-            })
-
-        })
-    })
-</script>
+<script src="js/satuan_details.js"></script>
 <?= $this->endSection() ?>

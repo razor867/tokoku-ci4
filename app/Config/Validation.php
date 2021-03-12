@@ -38,6 +38,12 @@ class Validation
 	];
 
 	public $satuan = [
+		'id' => [
+			'rules' => 'integer',
+			'errors' => [
+				'integer' => 'Field harus integer'
+			]
+		],
 		'satuan' => [
 			'rules'  => 'required|alpha_space',
 			'errors' => [
@@ -55,6 +61,12 @@ class Validation
 	];
 
 	public $kategori = [
+		'id' => [
+			'rules' => 'integer',
+			'errors' => [
+				'integer' => 'Field harus integer'
+			]
+		],
 		'kategori' => [
 			'rules'  => 'required|alpha_space',
 			'errors' => [
@@ -72,8 +84,14 @@ class Validation
 	];
 
 	public $produk = [
+		'id' => [
+			'rules' => 'alpha_numeric',
+			'errors' => [
+				'alpha_numeric' => 'Harap isi dengan huruf alfabetic atau kombinasi angka'
+			]
+		],
 		'nama_produk' => [
-			'rules' => 'required|alpha_numeric_punct',
+			'rules' => 'alpha_numeric_punct|required',
 			'errors' => [
 				'required' => 'Wajib diisi',
 				'alpha_numeric_punct' => 'Harap isi dengan huruf alfabetic atau kombinasi angka'
@@ -117,10 +135,9 @@ class Validation
 
 	public $penjualan = [
 		'id' => [
-			'rules' => 'required|alpha_numeric',
+			'rules' => 'integer',
 			'errors' => [
-				'required' => 'Wajib diisi',
-				'alpha_numeric' => 'Field harus alpha numeric'
+				'integer' => 'Field harus integer'
 			]
 		],
 		'produk' => [
@@ -155,7 +172,7 @@ class Validation
 
 	public $pembelian = [
 		'id' => [
-			'rules' => 'permit_empty|integer',
+			'rules' => 'integer',
 			'errors' => [
 				'integer' => 'Field harus integer'
 			]

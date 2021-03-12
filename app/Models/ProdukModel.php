@@ -33,6 +33,8 @@ class ProdukModel extends Model
     public function getLastID()
     {
         $builder = $this->builder();
-        return $builder->countAll();
+        $builder->selectMax('id');
+        $data = $builder->get();
+        return $data->getResult();
     }
 }

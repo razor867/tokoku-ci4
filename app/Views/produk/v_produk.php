@@ -17,12 +17,12 @@
                 <span class="text">Add Produk</span>
             </a>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="overflow-y: scroll; height:400px;">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable" data-url="/product/listdata" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th>Produk</th>
+                        <tr class="filter">
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Kategori</th>
                             <th>Satuan</th>
                             <th>Harga</th>
@@ -30,9 +30,10 @@
                             <th>Action</th>
                         </tr>
                     </thead>
+                    <tbody></tbody>
                     <tfoot>
                         <tr>
-                            <th>Produk</th>
+                            <th class="text-wrap w-25">Produk</th>
                             <th>Kategori</th>
                             <th>Satuan</th>
                             <th>Harga</th>
@@ -40,32 +41,7 @@
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                        <?php
-                        function rupiah($angka)
-                        {
-                            $hasil_rupiah = "Rp" . number_format($angka);
-                            return $hasil_rupiah;
-                        }
-                        ?>
-                        <?php foreach ($produk as $p) : ?>
-                            <tr>
-                                <td><?= $p->nama_produk ?><br><?= ($p->stok > 0) ? '<span class="badge badge-success">Tersedia</span>' : '<span class="badge badge-secondary">Kosong</span>' ?></td>
-                                <td><?= $p->nama_category ?></td>
-                                <td><?= $p->nama_satuan ?></td>
-                                <td><?= rupiah($p->harga) ?></td>
-                                <td><?= $p->stok ?></td>
-                                <td>
-                                    <a href="#" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#product_modal" title="Edit">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                                    <a href="/product/deleteProduct/<?= $p->id ?>" class="btn btn-danger btn-circle delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
+
                 </table>
             </div>
         </div>
@@ -163,60 +139,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js_custom') ?>
-<script src="js/demo/datatables-demo.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.add').click(function() {
-            $('.modal-title').text('Tambah Produk');
-            $('.submit_btn').text('Add');
-            $('form').attr('action', '<?= base_url("product/addProduct") ?>');
-            if ('<?= session()->getFlashdata("info") ?>' != 'error') {
-                $('#nama_produk').val('');
-                $('#category').val('').trigger('change');
-                $('#satuan').val('').trigger('change');
-                $('#stok').val('');
-                $('#harga').val('');
-                $('.written_nominal').html('');
-            }
-        })
-
-        $('.edit').click(function() {
-            $('.modal-title').text('Edit Produk');
-            $('.submit_btn').text('Edit');
-            $('form').attr('action', '<?= base_url("product/editProduct") ?>');
-            $('#id').val($(this).attr('data'));
-            $.ajax({
-                url: '<?= base_url("product/getRowProduct") ?>',
-                data: {
-                    id: $(this).attr('data'),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#nama_produk').val(data.nama_produk);
-                    $('#category').val(data.id_cat_produk).trigger('change');
-                    $('#satuan').val(data.id_satuan).trigger('change');
-                    $('#stok').val(data.stok);
-                    $('#harga').val(data.harga);
-                    $('.written_nominal').text('*' + convert($('#harga').val()) + ' rupiah*');
-                }
-            })
-        })
-
-        $('.sc_select').select2({
-            theme: 'bootstrap4',
-            placeholder: "Pilih",
-            allowClear: true
-        });
-
-        $('#harga').keyup(function() {
-            $('.written_nominal').text('*' + convert($('#harga').val()) + ' rupiah*');
-            $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-            $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-        });
-
-        $(".written_nominal:contains('satu ratus')").text($('.written_nominal').text().replace('satu ratus', 'seratus'));
-        $(".written_nominal:contains('satu ribu')").text($('.written_nominal').text().replace('satu ribu', 'seribu'));
-    })
-</script>
+<!-- <script src="js/demo/datatables-demo.js"></script> -->
+<script src="js/produk_details.js"></script>
 <?= $this->endSection() ?>

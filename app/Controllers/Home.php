@@ -22,4 +22,3 @@ class Home extends BaseController
 		return view('home/v_users', $data);
 	}
 }
-
