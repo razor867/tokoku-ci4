@@ -405,7 +405,7 @@
     <!-- Page level custom scripts -->
     <?= $this->renderSection('js_custom') ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/app.js"></script>
     <?php if (session()->getFlashdata('info') != '') : ?>
         <script>
             const infoFlash = '<?= session()->getFlashdata('info') ?>';

@@ -36,6 +36,8 @@ $(document).ready(function () {
   );
 
   $("#dataTable").DataTable({
+    dom: "Bfrtip",
+    buttons: ["copy", "csv", "excel", "pdf", "print"],
     processing: true,
     oLanguage: {
       sLengthMenu: "Tampilkan _MENU_ data per halaman",
