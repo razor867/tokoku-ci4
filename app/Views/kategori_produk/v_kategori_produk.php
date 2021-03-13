@@ -87,7 +87,6 @@
 
 <?= $this->section('css_custom') ?>
 <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
 <?= $this->endSection() ?>
 
 <?= $this->section('js_plugins') ?>
