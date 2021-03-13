@@ -38,7 +38,28 @@ $(document).ready(function () {
 
   $("#dataTable").DataTable({
     dom: "Bfrtip",
-    buttons: ["copy", "csv", "excel", "pdf", "print"],
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn btn-secondary btn-sm",
+      },
+      {
+        extend: "csv",
+        className: "btn btn-secondary btn-sm",
+      },
+      {
+        extend: "excel",
+        className: "btn btn-secondary btn-sm",
+      },
+      {
+        extend: "pdf",
+        className: "btn btn-secondary btn-sm",
+      },
+      {
+        extend: "print",
+        className: "btn btn-secondary btn-sm",
+      },
+    ],
     processing: true,
     oLanguage: {
       sLengthMenu: "Tampilkan _MENU_ data per halaman",
