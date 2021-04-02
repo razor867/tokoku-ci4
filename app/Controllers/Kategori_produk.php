@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\KategoriProdukModel;
 use App\Models\Serverside_model;
 
-class kategori_produk extends BaseController
+class Kategori_produk extends BaseController
 {
     protected $m_cat_produk;
     protected $validation;

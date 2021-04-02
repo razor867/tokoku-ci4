@@ -24,13 +24,18 @@ class Pembelian extends BaseController
         $this->validation = \Config\Services::validation();
         $this->serversideModel = new Serverside_model();
     }
+
     public function index()
     {
-        $data['produk'] = $this->m_produk->getProduk();
-        $data['satuan'] = $this->m_satuan->findAll();
-        $data['title'] = 'Pembelian';
-        $data['validation'] = $this->validation;
-        return view('pembelian/v_pembelian', $data);
+        if (has_permission('pembelian/page')) {
+            $data['produk'] = $this->m_produk->getProduk();
+            $data['satuan'] = $this->m_satuan->findAll();
+            $data['title'] = 'Pembelian';
+            $data['validation'] = $this->validation;
+            return view('pembelian/v_pembelian', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 
     public function addPembelian()

@@ -9,12 +9,12 @@ class Email extends BaseConfig
 	/**
 	 * @var string
 	 */
-	public $fromEmail = "razormaverik@gmail.com";
+	public $fromEmail;
 
 	/**
 	 * @var string
 	 */
-	public $fromName = "Tokoku";
+	public $fromName;
 
 	/**
 	 * @var string
@@ -34,6 +34,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $protocol = 'mail';
+	// public $protocol = 'smptp';
 
 	/**
 	 * The server path to Sendmail.
@@ -48,6 +49,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $SMTPHost;
+	// public $SMTPHost = 'smptp.gmail.com';
 
 	/**
 	 * SMTP Username
@@ -55,6 +57,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $SMTPUser;
+	// public $SMTPUser = 'razormaverik@gmail.com';
 
 	/**
 	 * SMTP Password
@@ -62,6 +65,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $SMTPPass;
+	// public $SMTPPass = 'pengenduit';
 
 	/**
 	 * SMTP Port
@@ -69,6 +73,7 @@ class Email extends BaseConfig
 	 * @var integer
 	 */
 	public $SMTPPort = 25;
+	// public $SMTPPort = 455;
 
 	/**
 	 * SMTP Timeout (in seconds)
@@ -76,6 +81,7 @@ class Email extends BaseConfig
 	 * @var integer
 	 */
 	public $SMTPTimeout = 5;
+	// public $SMTPTimeout = 60;
 
 	/**
 	 * Enable persistent SMTP connections
@@ -90,6 +96,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $SMTPCrypto = 'tls';
+	// public $SMTPCrypto = 'ssl';
 
 	/**
 	 * Enable word-wrap
@@ -111,6 +118,7 @@ class Email extends BaseConfig
 	 * @var string
 	 */
 	public $mailType = 'text';
+	// public $mailType = 'html';
 
 	/**
 	 * Character set (utf-8, iso-8859-1, etc.)

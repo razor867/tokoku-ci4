@@ -208,6 +208,47 @@ class Validation
 		]
 	];
 
+	public $add_user = [
+		'email' => [
+			'rules' => 'required|valid_email|is_unique[users.email]',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'valid_email' => 'Email tidak valid',
+				'is_unique[users.email]' => 'Email sudah ada',
+			]
+		],
+		'username'  	=> [
+			'rules' => 'required|alpha_numeric_space|min_length[3]|is_unique[users.username]',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'alpha_numeric_space' => 'Tidak boleh memasukkan script',
+				'min_length' => 'minimal 3 karakter yang diinput',
+				'is_unique[users.username]' => 'username sudah ada'
+			]
+		],
+		'password'	 	=> [
+			'rules' => 'required|strong_password',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'strong_password' => 'Password harus mengandung huruf besar dan kecil'
+			]
+		],
+		'pass_confirm' 	=> [
+			'rules' => 'required|matches[password]',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'matches' => 'Password tidak sama'
+			]
+		],
+		'roles' => [
+			'rules' => 'required|numeric',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'numeric' => 'Field wajib numeric'
+			]
+		]
+	];
+
 
 	//--------------------------------------------------------------------
 	// Rules
