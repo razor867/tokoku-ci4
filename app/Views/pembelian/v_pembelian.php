@@ -8,8 +8,8 @@
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary d-inline">Daftar Pembelian</h6>
+        <div class="card-header py-3" style="background-color: #5a5c69;">
+            <h6 class="m-0 font-weight-bold text-white d-inline">Daftar Pembelian</h6>
             <a href="#" class="btn btn-primary btn-icon-split float-right add" data-toggle="modal" data-target="#pembelian_modal">
                 <span class="icon text-white-50">
                     <i class="fas fa-flag"></i>
@@ -53,8 +53,8 @@
 <div class="modal fade" id="pembelian_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <div class="modal-header" style="background-color: #5a5c69;">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

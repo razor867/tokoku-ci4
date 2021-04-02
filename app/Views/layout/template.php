@@ -26,6 +26,11 @@
             background-image: linear-gradient(180deg, #5a5c69 10%, #5a5c69 100%);
             background-size: cover;
         }
+
+        .close {
+            color: #fff;
+            opacity: 1;
+        }
     </style>
 
     <link rel="icon" type="image/png" href="/img/tokoku.png" />
@@ -373,8 +378,8 @@
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <div class="modal-header" style="background-color: #5a5c69;">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

@@ -8,8 +8,8 @@
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary d-inline">Daftar User</h6>
+        <div class="card-header py-3" style="background-color: #5a5c69;">
+            <h6 class="m-0 font-weight-bold text-white d-inline">Daftar User</h6>
             <a href="#" class="btn btn-primary btn-icon-split float-right add" data-toggle="modal" data-target="#addUserModal">
                 <span class="icon text-white-50">
                     <i class="fas fa-flag"></i>
@@ -85,8 +85,8 @@
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><?= $modaltitle ?></h5>
+            <div class="modal-header" style="background-color: #5a5c69;">
+                <h5 class="modal-title text-white" id="exampleModalLabel"><?= $modaltitle ?></h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
