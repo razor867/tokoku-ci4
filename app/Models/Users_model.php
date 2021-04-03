@@ -57,4 +57,11 @@ class Users_model extends Model
             return $d->name;
         }
     }
+
+    public function edit_user($id_user, $data)
+    {
+        $builder = $this->builder();
+        $builder->where('id', $id_user);
+        $builder->update($data);
+    }
 }

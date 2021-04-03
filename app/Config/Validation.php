@@ -249,6 +249,44 @@ class Validation
 		]
 	];
 
+	public $edit_user = [
+		'photo' => [
+			'rules' => 'permit_empty|is_image[photo]|max_size[photo,1048]|mime_in[photo,image/png,image/jpg,image/jpeg,image/gif]',
+			'errors' => [
+				'max-size' => 'File terlalu besar',
+				'is_image' => 'Ini bukanlah gambar',
+				'mime_in' => 'Ini bukan gambar'
+			]
+		],
+		'firstname' => [
+			'rules' => 'permit_empty|alpha_numeric_space|min_length[3]',
+			'errors' => [
+				'alpha_numeric_space' => 'Tidak boleh memasukkan script',
+				'min_length' => 'minimal 3 karakter yang diinput',
+			]
+		],
+		'lastname' => [
+			'rules' => 'permit_empty|alpha_numeric_space|min_length[3]',
+			'errors' => [
+				'alpha_numeric_space' => 'Tidak boleh memasukkan script',
+				'min_length' => 'minimal 3 karakter yang diinput',
+			]
+		],
+		'about' => [
+			'rules' => 'permit_empty|alpha_numeric_punct',
+			'errors' => [
+				'alpha_numeric_punct' => 'Tidak boleh memasukkan script'
+			]
+		],
+		'id_user' => [
+			'rules' => 'required|numeric',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
 
 	//--------------------------------------------------------------------
 	// Rules

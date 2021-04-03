@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\Users_model;
 use Myth\Auth\Entities\User;
 
+use function PHPUnit\Framework\throwException;
+
 class Home extends BaseController
 {
 	protected $model_user;
@@ -26,6 +28,7 @@ class Home extends BaseController
 	public function profile()
 	{
 		$data['title'] = 'Profile';
+		$data['validation'] = $this->validation;
 		return view('home/v_profile', $data);
 	}
 
@@ -56,5 +59,51 @@ class Home extends BaseController
 		$this->model_user->addUserToGroup($id_newUser->id, $this->request->getPost('roles'));
 		session()->setFlashdata('info', 'User berhasil ditambahkan');
 		return redirect()->to('/home/users');
+	}
+
+	public function edit_user()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			if (!$this->validate($this->validation->getRuleGroup('edit_user'))) {
+				session()->setFlashdata('info', 'error_add');
+				return redirect()->to('/home/profile')->withInput();
+			}
+
+			$id_user = $this->request->getPost('id_user');
+			$fileSampul = $this->request->getFile('photo');
+			$fileSampulLama = $this->request->getVar('sampulLama');
+			//cek gambar, apakah tetap gambar lama?
+			if ($fileSampul->getError() == 4) {
+				$namaSampul = $fileSampulLama;
+			} else {
+				//generate nama file random
+				$namaSampul = $fileSampul->getRandomName();
+				//pindahkan gambar
+				$fileSampul->move('img', $namaSampul);
+				//hapus file yang lama
+				if ($fileSampulLama != 'undraw_profile.svg') {
+					unlink('img/' . $fileSampulLama);
+				}
+			}
+			$data_edit = [
+				'firstname' => $this->request->getPost('firstname'),
+				'lastname' => $this->request->getPost('lastname'),
+				'profile_picture' => $namaSampul,
+				'about_me' => $this->request->getPost('about'),
+			];
+			$this->model_user->edit_user($id_user, $data_edit);
+
+			session()->setFlashdata('info', 'Edit berhasil!');
+			return redirect()->to('/home/profile');
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+
+	public function edit_user_page()
+	{
+		$this->request->isAJAX() or exit();
+		$data = $this->model_user->find($this->request->getPost('id_user'));
+		echo json_encode($data);
 	}
 }
