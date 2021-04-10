@@ -24,8 +24,11 @@ function deleteData(page, idDelete) {
   } else if (page == "_datpen") {
     link = "/penjualan/deletePenjualan/" + idDelete;
   } else if (page == "_datpem") {
-    link = "/pembelian/deletePembelian" + idDelete;
+    link = "/pembelian/deletePembelian/" + idDelete;
+  } else if (page == "_datusers") {
+    link = "/home/deleteUserAccount/" + idDelete;
   }
+
   Swal.fire({
     title: "Yakin hapus data ini?",
     text: "Kamu tidak akan melihatnya lagi!",

@@ -22,6 +22,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Image</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -30,6 +31,7 @@
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>Image</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -59,14 +61,15 @@
                             }
                             ?>
                             <tr>
+                                <td><img src="<?= '/img/' . $u->profile_picture ?>" width="75px" class="img-thumbnail img-preview"></td>
                                 <td><?= $u->username ?></td>
                                 <td><?= $u->email ?></td>
                                 <td><span class="badge <?= $class_badge ?>"><?= $user_role ?></span></td>
                                 <td>
-                                    <a href="#" data="" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#product_modal" title="Edit">
+                                    <a href="javascript:void(0)" data="<?= $u->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#addUserModal" title="Edit">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </a>
-                                    <a href="" class="btn btn-danger btn-circle delete" title="Delete">
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-circle delete" onclick="deleteData('_datusers','<?= $u->id ?>')" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -96,7 +99,7 @@
                     <?= csrf_field() ?>
                     <div class="form-group">
                         <label for="email"><?= lang('Auth.email') ?></label>
-                        <input type="email" class="form-control <?php if (session('errors.email')) : ?>is-invalid<?php endif ?>" name="email" aria-describedby="emailHelp" placeholder="<?= lang('Auth.email') ?>" value="<?= old('email') ?>">
+                        <input type="email" id="email" class="form-control <?php if (session('errors.email')) : ?>is-invalid<?php endif ?>" name="email" aria-describedby="emailHelp" placeholder="<?= lang('Auth.email') ?>" value="<?= old('email') ?>">
                         <small id="emailHelp" class="form-text text-muted"><?= lang('Auth.weNeverShare') ?></small>
                         <div class="invalid-feedback">
                             <?= $validation->getError('email') ?>
@@ -104,21 +107,21 @@
                     </div>
                     <div class="form-group">
                         <label for="username"><?= lang('Auth.username') ?></label>
-                        <input type="text" class="form-control <?php if ($validation->hasError('username')) : ?>is-invalid<?php endif ?>" name="username" placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>">
+                        <input type="text" id="username" class="form-control <?php if ($validation->hasError('username')) : ?>is-invalid<?php endif ?>" name="username" placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('username') ?>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password"><?= lang('Auth.password') ?></label>
-                        <input type="password" name="password" class="form-control <?php if ($validation->hasError('password')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.password') ?>" autocomplete="off">
+                        <input type="password" id="password" name="password" class="form-control <?php if ($validation->hasError('password')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.password') ?>" autocomplete="off">
                         <div class="invalid-feedback">
                             <?= $validation->getError('password') ?>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
-                        <input type="password" name="pass_confirm" class="form-control <?php if ($validation->hasError('pass_confirm')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off">
+                        <input type="password" id="pass_confirm" name="pass_confirm" class="form-control <?php if ($validation->hasError('pass_confirm')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off">
                         <div class="invalid-feedback">
                             <?= $validation->getError('pass_confirm') ?>
                         </div>
@@ -135,6 +138,7 @@
                             <?= $validation->getError('roles') ?>
                         </div>
                     </div>
+                    <input type="hidden" name="id_user" id="userid">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>

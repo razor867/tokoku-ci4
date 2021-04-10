@@ -14,7 +14,7 @@ class Users_model extends Model
         'status', 'status_message', 'active', 'force_pass_reset', 'permissions', 'deleted_at',
         'firstname', 'lastname', 'profile_picture'
     ];
-
+    protected $useSoftDeletes = true;
     protected $useTimestamps = true;
 
     public function getroles($group_id = '')
@@ -45,6 +45,18 @@ class Users_model extends Model
         $builder->insert($data);
     }
 
+    public function updateUserToGroup($id_user, $id_group)
+    {
+        $db      = \Config\Database::connect();
+        $builder = $db->table('auth_groups_users');
+        $data = [
+            'group_id' => $id_group,
+            'user_id' => $id_user
+        ];
+        $builder->where('user_id', $id_user);
+        $builder->update($data);
+    }
+
     public function getRoleNameById($id_user)
     {
         $group_id = '';
@@ -56,6 +68,16 @@ class Users_model extends Model
         foreach ($data as $d) {
             return $d->name;
         }
+    }
+
+    public function getRoleById($id_user)
+    {
+        $group_id = '';
+        $data_group = $this->getUserGroup($id_user);
+        foreach ($data_group as $d) {
+            $group_id = $d->group_id;
+        }
+        return $this->getroles($group_id);
     }
 
     public function edit_user($id_user, $data)

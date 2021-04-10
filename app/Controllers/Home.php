@@ -106,4 +106,55 @@ class Home extends BaseController
 		$data = $this->model_user->find($this->request->getPost('id_user'));
 		echo json_encode($data);
 	}
+
+	public function get_user_account()
+	{
+		$this->request->isAJAX() or exit();
+		$data = $this->model_user->find($this->request->getPost('id_user'));
+		$data_role = $this->model_user->getRoleById($data->id);
+		foreach ($data_role as $dr) {
+			$data->roles_id = $dr->id;
+		}
+		echo json_encode($data);
+	}
+
+	public function edit_user_account()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			if (!$this->validate($this->validation->getRuleGroup('edit_user_account'))) {
+				session()->setFlashdata('info', 'error_add');
+				return redirect()->to('/home/users')->withInput();
+			}
+
+			$postData = $this->request->getPost();
+			if ($postData['password'] != null && $postData['pass_confirm'] != null) {
+				$allowedPostFields = array_merge(['password'], $this->config->validFields, $this->config->personalFields);
+				$user = new User($this->request->getPost($allowedPostFields));
+				$this->config->requireActivation !== false ? $user->generateActivateHash() : $user->activate();
+				$this->model_user->update($postData['id_user'], $user);
+			} else {
+				$this->model_user->update($postData['id_user'], [
+					'email' => $postData['email'],
+					'username' => $postData['username']
+				]);
+			}
+			$groups = $this->model_user->getUserGroup($postData['id_user']);
+			$id_group = '';
+			foreach ($groups as $group) {
+				$id_group = $group->id;
+			}
+			$this->model_user->updateUserToGroup($postData['id_user'], $postData['roles']);
+			session()->setFlashdata('info', 'User Account berhasil dirubah');
+			return redirect()->to('/home/users');
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+
+	public function deleteUserAccount($id_user)
+	{
+		$this->model_user->delete($id_user);
+		session()->setFlashdata('info', 'User Account berhasil dihapus');
+		return redirect()->to('/home/users');
+	}
 }

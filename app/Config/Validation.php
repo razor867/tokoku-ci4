@@ -246,9 +246,16 @@ class Validation
 				'required' => 'Wajib diisi',
 				'numeric' => 'Field wajib numeric'
 			]
+		],
+		'id_user' => [
+			'rules' => 'permit_empty|numeric',
+			'errors' => [
+				'numeric' => 'Wajib numeric'
+			]
 		]
 	];
 
+	//edit user profile
 	public $edit_user = [
 		'photo' => [
 			'rules' => 'permit_empty|is_image[photo]|max_size[photo,1048]|mime_in[photo,image/png,image/jpg,image/jpeg,image/gif]',
@@ -282,6 +289,51 @@ class Validation
 			'rules' => 'required|numeric',
 			'errors' => [
 				'required' => 'Wajib diisi',
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
+	//edit user account
+	public $edit_user_account = [
+		'email' => [
+			'rules' => 'required|valid_email',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'valid_email' => 'Email tidak valid',
+			]
+		],
+		'username'  	=> [
+			'rules' => 'required|alpha_numeric_space|min_length[3]',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'alpha_numeric_space' => 'Tidak boleh memasukkan script',
+				'min_length' => 'minimal 3 karakter yang diinput',
+			]
+		],
+		'password'	 	=> [
+			'rules' => 'permit_empty|strong_password',
+			'errors' => [
+				'permit_empty' => 'boleh kosong',
+				'strong_password' => 'Password harus mengandung huruf besar dan kecil'
+			]
+		],
+		'pass_confirm' 	=> [
+			'rules' => 'matches[password]',
+			'errors' => [
+				'matches' => 'Password tidak sama'
+			]
+		],
+		'roles' => [
+			'rules' => 'required|numeric',
+			'errors' => [
+				'required' => 'Wajib diisi',
+				'numeric' => 'Field wajib numeric'
+			]
+		],
+		'id_user' => [
+			'rules' => 'required|numeric',
+			'errors' => [
 				'numeric' => 'Wajib numeric'
 			]
 		]
