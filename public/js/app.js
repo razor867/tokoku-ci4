@@ -27,6 +27,10 @@ function deleteData(page, idDelete) {
     link = "/pembelian/deletePembelian/" + idDelete;
   } else if (page == "_datusers") {
     link = "/home/deleteUserAccount/" + idDelete;
+  } else if (page == "_permissions") {
+    link = "/permissions/delete/" + idDelete;
+  } else if (page == "_groups") {
+    link = "/groups/delete/" + idDelete;
   }
 
   Swal.fire({

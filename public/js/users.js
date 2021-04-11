@@ -8,6 +8,11 @@ $(document).ready(function () {
   $(".add").click(function () {
     $(".modal-title").text("Add User");
     $("form").attr("action", "/home/add_new_user");
+    $("#email").val("");
+    $("#username").val("");
+    $("#roles").val("").trigger("change");
+    $("#password").val("");
+    $("#pass_confirm").val("");
     $("#userid").val("");
     $(".modal-footer").find(".btn-primary").text("Add");
   });

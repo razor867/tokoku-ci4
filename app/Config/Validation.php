@@ -339,6 +339,90 @@ class Validation
 		]
 	];
 
+	public $add_permissions = [
+		'name' => [
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'description' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'id_permissions' => [
+			'rules' => 'permit_empty|numeric',
+			'errors' => [
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
+	public $edit_permissions = [
+		'name' => [
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'description' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'id_permissions' => [
+			'rules' => 'required|numeric',
+			'errors' => [
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
+	public $add_groups = [
+		'name' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'description' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'id_groups' => [
+			'rules' => 'permit_empty|numeric',
+			'errors' => [
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
+	public $edit_groups = [
+		'name' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'description' => [
+			'rules' => 'required|alpha_numeric_punct',
+			'errors' => [
+				'required' => 'Wajib diisi',
+			]
+		],
+		'id_groups' => [
+			'rules' => 'required|numeric',
+			'errors' => [
+				'numeric' => 'Wajib numeric'
+			]
+		]
+	];
+
 
 	//--------------------------------------------------------------------
 	// Rules

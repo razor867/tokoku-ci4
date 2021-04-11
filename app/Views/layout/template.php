@@ -120,16 +120,37 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item <?= (current_url() == base_url('home/profile')) ? 'active' : '' ?>">
                 <a class="nav-link collapsed" href="/home/profile">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-id-badge"></i>
                     <span>Profile</span>
                 </a>
             </li>
 
             <li class="nav-item <?= (current_url() ==  base_url('home/users')) ? 'active' : '' ?>">
                 <a class="nav-link collapsed" href="/home/users">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-user"></i>
                     <span>Users</span>
                 </a>
+            </li>
+
+            <li class="nav-item <?= (current_url() ==  base_url('permissions')) ? 'active' : '' ?>">
+                <a class="nav-link collapsed" href="/permissions">
+                    <i class="fas fa-user-slash"></i>
+                    <span>Permissions</span>
+                </a>
+            </li>
+
+            <li class="nav-item <?= (current_url() == base_url('groups') || current_url() == base_url('groups_permissions') ? 'active' : '') ?>">
+                <a class="nav-link collapsed groups" href="#" data-toggle="collapse" data-target="#groups_dropdown" aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-users"></i>
+                    <span>Groups</span>
+                </a>
+                <div id="groups_dropdown" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">List data:</h6>
+                        <a class="collapse-item <?= (current_url() == base_url('groups') ? 'active' : '') ?>" href="/groups">Groups</a>
+                        <a class="collapse-item <?= (current_url() == base_url('groups_permissions') ? 'active' : '') ?>" href="/groups_permissions">Groups Permissions</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
