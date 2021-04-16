@@ -109,25 +109,33 @@ class Kategori_produk extends BaseController
 
     public function listdata()
     {
-        $column_order = array('nama_category', 'deskripsi', 'id');
+        if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Gudang')) {
+            $column_order = array('nama_category', 'deskripsi', 'id');
+        } else {
+            $column_order = array('nama_category', 'deskripsi');
+        }
+
         $column_search = array('nama_category', 'deskripsi');
         $order = array('nama_category' => 'asc');
         $list = $this->serversideModel->get_datatables('cat_produk', $column_order, $column_search, $order);
         $data = array();
         // $no = $this->request->getPost('start');
         foreach ($list as $lt) {
-            $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#kategori_produk_modal" title="Edit">
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Gudang')) {
+                $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#kategori_produk_modal" title="Edit">
                                 <i class="fas fa-exclamation-triangle"></i>
                               </a>
                               <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_cat_product\',\'' . $lt->id . '\')" title="Delete">
                                 <i class="fas fa-trash"></i>
                               </a>';
-
+            }
 
             $row = array();
             $row[] = $lt->nama_category;
             $row[] = $lt->deskripsi;
-            $row[] = $button_action;
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Gudang')) {
+                $row[] = $button_action;
+            }
             $data[] = $row;
         }
         $output = array(

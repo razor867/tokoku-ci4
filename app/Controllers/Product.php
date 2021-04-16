@@ -47,19 +47,26 @@ class Product extends BaseController
     {
         //Column Order Harus Sesuai Urutan Kolom Pada Header Tabel di bagian View
         //Awali nama kolom tabel dengan nama tabel->tanda titik->nama kolom seperti pengguna.nama
-        $column_order = array('nama_produk', 'nama_category', 'nama_satuan', 'harga', 'stok', 'id');
+        if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk')) {
+            $column_order = array('nama_produk', 'nama_category', 'nama_satuan', 'harga', 'stok', 'id');
+        } else {
+            $column_order = array('nama_produk', 'nama_category', 'nama_satuan', 'harga', 'stok');
+        }
+
         $column_search = array('nama_produk', 'nama_category', 'nama_satuan', 'harga', 'stok');
         $order = array('nama_produk' => 'asc');
         $list = $this->serversideModel->get_datatables('_data_produk', $column_order, $column_search, $order);
         $data = array();
         // $no = $this->request->getPost('start');
         foreach ($list as $lt) {
-            $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#product_modal" title="Edit">
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk')) {
+                $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#product_modal" title="Edit">
                                 <i class="fas fa-exclamation-triangle"></i>
                               </a>
                               <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_product\',\'' . $lt->id . '\')" title="Delete">
                                 <i class="fas fa-trash"></i>
                               </a>';
+            }
             $hasil_rupiah = "Rp" . number_format($lt->harga);
 
             $row = array();
@@ -68,7 +75,9 @@ class Product extends BaseController
             $row[] = $lt->nama_satuan;
             $row[] = $hasil_rupiah;
             $row[] = $lt->stok;
-            $row[] = $button_action;
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk')) {
+                $row[] = $button_action;
+            }
             $data[] = $row;
         }
         $output = array(

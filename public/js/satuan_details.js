@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  const $thead = $("thead tr th").length;
+
   $(".add").click(function () {
     if (editClick == true) {
       cleanForm();
@@ -54,7 +56,7 @@ $(document).ready(function () {
     columnDefs: [
       {
         orderable: false,
-        targets: [2],
+        targets: $thead == 2 ? [] : [2],
       },
       {
         className: "text-wrap w-25",

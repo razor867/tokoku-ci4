@@ -18,10 +18,10 @@ class Satuan extends BaseController
     {
         $this->m_satuan = new SatuanModel();
         $this->serversideModel = new Serverside_model();
-        $this->perm =  has_permission('produk/page');
-        $this->permAdd = has_permission('produk/add');
-        $this->permEdit = has_permission('produk/edit');
-        $this->permDelete = has_permission('produk/delete');
+        $this->perm =  has_permission('satuan/page');
+        $this->permAdd = has_permission('satuan/add');
+        $this->permEdit = has_permission('satuan/edit');
+        $this->permDelete = has_permission('satuan/delete');
     }
 
     public function index()
@@ -109,24 +109,32 @@ class Satuan extends BaseController
 
     public function listdata()
     {
-        $column_order = array('nama_satuan', 'deskripsi', 'id');
+        if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang') || in_groups('Admin Produk')) {
+            $column_order = array('nama_satuan', 'deskripsi', 'id');
+        } else {
+            $column_order = array('nama_satuan', 'deskripsi');
+        }
+
         $column_search = array('nama_satuan', 'deskripsi');
         $order = array('nama_satuan' => 'asc');
         $list = $this->serversideModel->get_datatables('satuan_produk', $column_order, $column_search, $order);
         $data = array();
         // $no = $this->request->getPost('start');
         foreach ($list as $lt) {
-            $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#satuan_modal" title="Edit">
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang') || in_groups('Admin Produk')) {
+                $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#satuan_modal" title="Edit">
                                 <i class="fas fa-exclamation-triangle"></i>
                               </a>
                               <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_satpro\',\'' . $lt->id . '\')" title="Delete">
                                 <i class="fas fa-trash"></i>
                               </a>';
-
+            }
             $row = array();
             $row[] = $lt->nama_satuan;
             $row[] = $lt->deskripsi;
-            $row[] = $button_action;
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang') || in_groups('Admin Produk')) {
+                $row[] = $button_action;
+            }
             $data[] = $row;
         }
         $output = array(

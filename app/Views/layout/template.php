@@ -73,26 +73,32 @@
             </div> -->
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item <?= (current_url() == base_url('product') ? 'active' : '') ?>">
-                <a class="nav-link collapsed" href="/product">
-                    <i class="fas fa-box"></i>
-                    <span>Data Produk</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Kasir')) : ?>
+                <li class="nav-item <?= (current_url() == base_url('product') ? 'active' : '') ?>">
+                    <a class="nav-link collapsed" href="/product">
+                        <i class="fas fa-box"></i>
+                        <span>Data Produk</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
-            <li class="nav-item <?= (current_url() == base_url('kategori_produk') ? 'active' : '') ?>">
-                <a class="nav-link collapsed" href="/kategori_produk">
-                    <i class="fas fa-tag"></i>
-                    <span>Kategori Produk</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Kasir') || in_groups('Admin Gudang')) : ?>
+                <li class="nav-item <?= (current_url() == base_url('kategori_produk') ? 'active' : '') ?>">
+                    <a class="nav-link collapsed" href="/kategori_produk">
+                        <i class="fas fa-tag"></i>
+                        <span>Kategori Produk</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
-            <li class="nav-item <?= (current_url() == base_url('satuan') ? 'active' : '') ?>">
-                <a class="nav-link collapsed" href="/satuan">
-                    <i class="fas fa-balance-scale"></i>
-                    <span>Satuan</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Kasir') || in_groups('Admin Gudang')) : ?>
+                <li class="nav-item <?= (current_url() == base_url('satuan') ? 'active' : '') ?>">
+                    <a class="nav-link collapsed" href="/satuan">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Satuan</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item <?= (current_url() == base_url('penjualan') || current_url() == base_url('pembelian') ? 'active' : '') ?>">
@@ -103,8 +109,12 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List data:</h6>
-                        <a class="collapse-item <?= (current_url() == base_url('penjualan') ? 'active' : '') ?>" href="/penjualan">Penjualan</a>
-                        <a class="collapse-item <?= (current_url() == base_url('pembelian') ? 'active' : '') ?>" href="/pembelian">Pembelian</a>
+                        <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) : ?>
+                            <a class="collapse-item <?= (current_url() == base_url('penjualan') ? 'active' : '') ?>" href="/penjualan">Penjualan</a>
+                        <?php endif ?>
+                        <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang')) : ?>
+                            <a class="collapse-item <?= (current_url() == base_url('pembelian') ? 'active' : '') ?>" href="/pembelian">Pembelian</a>
+                        <?php endif ?>
                     </div>
                 </div>
             </li>
@@ -125,33 +135,43 @@
                 </a>
             </li>
 
-            <li class="nav-item <?= (current_url() ==  base_url('home/users')) ? 'active' : '' ?>">
-                <a class="nav-link collapsed" href="/home/users">
-                    <i class="fas fa-user"></i>
-                    <span>Users</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin') || in_groups('Admin')) : ?>
+                <li class="nav-item <?= (current_url() ==  base_url('home/users')) ? 'active' : '' ?>">
+                    <a class="nav-link collapsed" href="/home/users">
+                        <i class="fas fa-user"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
-            <li class="nav-item <?= (current_url() ==  base_url('permissions')) ? 'active' : '' ?>">
-                <a class="nav-link collapsed" href="/permissions">
-                    <i class="fas fa-user-slash"></i>
-                    <span>Permissions</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin')) : ?>
+                <li class="nav-item <?= (current_url() ==  base_url('permissions')) ? 'active' : '' ?>">
+                    <a class="nav-link collapsed" href="/permissions">
+                        <i class="fas fa-user-slash"></i>
+                        <span>Permissions</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
-            <li class="nav-item <?= (current_url() == base_url('groups') || current_url() == base_url('groups_permissions') ? 'active' : '') ?>">
-                <a class="nav-link collapsed groups" href="#" data-toggle="collapse" data-target="#groups_dropdown" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-users"></i>
-                    <span>Groups</span>
-                </a>
-                <div id="groups_dropdown" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">List data:</h6>
-                        <a class="collapse-item <?= (current_url() == base_url('groups') ? 'active' : '') ?>" href="/groups">Groups</a>
-                        <a class="collapse-item <?= (current_url() == base_url('groups_perm') ? 'active' : '') ?>" href="/groups_perm">Groups Permissions</a>
+            <?php if (in_groups('Super Admin') || in_groups('Admin')) : ?>
+                <li class="nav-item <?= (current_url() == base_url('groups') || current_url() == base_url('groups_permissions') ? 'active' : '') ?>">
+                    <a class="nav-link collapsed groups" href="#" data-toggle="collapse" data-target="#groups_dropdown" aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-users"></i>
+                        <span>Groups</span>
+                    </a>
+                    <div id="groups_dropdown" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">List data:</h6>
+                            <?php if (in_groups('Super Admin') || in_groups('Admin')) : ?>
+                                <a class="collapse-item <?= (current_url() == base_url('groups') ? 'active' : '') ?>" href="/groups">Groups</a>
+                            <?php endif ?>
+                            <?php if (in_groups('Super Admin')) : ?>
+                                <a class="collapse-item <?= (current_url() == base_url('groups_perm') ? 'active' : '') ?>" href="/groups_perm">Groups Permissions</a>
+                            <?php endif ?>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -221,14 +241,14 @@
                             </div> -->
                         </li>
 
-                        <!-- Nav Item - Alerts -->
+                        <!-- Nav Item - Alerts
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
+                                Counter - Alerts
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
-                            <!-- Dropdown - Alerts -->
+                            Dropdown - Alerts
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alerts Center
@@ -268,16 +288,16 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
-                        </li>
+                        </li> -->
 
-                        <!-- Nav Item - Messages -->
+                        <!-- Nav Item - Messages
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
+                                Counter - Messages
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
-                            <!-- Dropdown - Messages -->
+                            Dropdown - Messages
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
@@ -328,9 +348,9 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
-                        </li>
+                        </li> -->
 
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <!-- <div class="topbar-divider d-none d-sm-block"></div> -->
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -346,14 +366,14 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <!-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
-                                </a>
+                                </a> -->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

@@ -144,19 +144,26 @@ class Penjualan extends BaseController
 
     public function listdata()
     {
-        $column_order = array('nama_produk', 'nama_satuan', 'qty', 'total_jual', 'tanggal_jual', 'id');
+        if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) {
+            $column_order = array('nama_produk', 'nama_satuan', 'qty', 'total_jual', 'tanggal_jual', 'id');
+        } else {
+            $column_order = array('nama_produk', 'nama_satuan', 'qty', 'total_jual', 'tanggal_jual');
+        }
+
         $column_search = array('nama_produk', 'nama_satuan', 'qty', 'total_jual', 'tanggal_jual');
         $order = array('tanggal_jual' => 'desc');
         $list = $this->serversideModel->get_datatables('_data_penjualan', $column_order, $column_search, $order);
         $data = array();
         // $no = $this->request->getPost('start');
         foreach ($list as $lt) {
-            $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) {
+                $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
                                 <i class="fas fa-exclamation-triangle"></i>
                               </a>
                               <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_datpen\',\'' . $lt->id . '\')" title="Delete">
                                 <i class="fas fa-trash"></i>
                               </a>';
+            }
             $hasil_rupiah = "Rp" . number_format($lt->total_jual);
 
             $row = array();
@@ -165,7 +172,9 @@ class Penjualan extends BaseController
             $row[] = $lt->qty;
             $row[] = $hasil_rupiah;
             $row[] = $lt->tanggal_jual;
-            $row[] = $button_action;
+            if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) {
+                $row[] = $button_action;
+            }
             $data[] = $row;
         }
         $output = array(
