@@ -148,7 +148,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List data:</h6>
                         <a class="collapse-item <?= (current_url() == base_url('groups') ? 'active' : '') ?>" href="/groups">Groups</a>
-                        <a class="collapse-item <?= (current_url() == base_url('groups_permissions') ? 'active' : '') ?>" href="/groups_permissions">Groups Permissions</a>
+                        <a class="collapse-item <?= (current_url() == base_url('groups_perm') ? 'active' : '') ?>" href="/groups_perm">Groups Permissions</a>
                     </div>
                 </div>
             </li>

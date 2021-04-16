@@ -15,6 +15,10 @@ class Penjualan extends BaseController
     protected $m_satuan;
     protected $validation;
     protected $serversideModel;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
@@ -23,9 +27,15 @@ class Penjualan extends BaseController
         $this->m_satuan = new SatuanModel();
         $this->validation = \Config\Services::validation();
         $this->serversideModel = new Serverside_model();
+        $this->perm =  has_permission('penjualan/page');
+        $this->permAdd = has_permission('penjualan/add');
+        $this->permEdit = has_permission('penjualan/edit');
+        $this->permDelete = has_permission('penjualan/delete');
     }
     public function index()
     {
+        $this->perm or exit();
+
         $data['produk'] = $this->m_produk->getProduk();
         $data['satuan'] = $this->m_satuan->findAll();
         $data['title'] = 'Penjualan';
@@ -35,6 +45,8 @@ class Penjualan extends BaseController
 
     public function addPenjualan()
     {
+        $this->permAdd or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('penjualan'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/penjualan')->withInput();
@@ -71,6 +83,8 @@ class Penjualan extends BaseController
 
     public function getRowPenjualan()
     {
+        $this->request->isAJAX() or exit();
+
         $id = $this->request->getPost('id');
         $query = $this->m_penjualan->find($id);
         echo json_encode($query);
@@ -78,6 +92,8 @@ class Penjualan extends BaseController
 
     public function editPenjualan()
     {
+        $this->permEdit or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('produk'))) {
             session()->setFlashdata('info', 'error_edit');
             return redirect()->to('/penjualan')->withInput();
@@ -108,6 +124,8 @@ class Penjualan extends BaseController
 
     public function deletePenjualan($id)
     {
+        $this->permDelete or exit();
+
         if (!preg_match('/^[a-zA-Z0-9_]*$/', $id)) {
             session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/penjualan');

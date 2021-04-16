@@ -14,6 +14,10 @@ class Product extends BaseController
     protected $m_cat_produk;
     protected $validation;
     protected $serversideModel;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
@@ -22,9 +26,15 @@ class Product extends BaseController
         $this->m_cat_produk = new KategoriProdukModel();
         $this->validation = \Config\Services::validation();
         $this->serversideModel = new Serverside_model();
+        $this->perm =  has_permission('produk/page');
+        $this->permAdd = has_permission('produk/add');
+        $this->permEdit = has_permission('produk/edit');
+        $this->permDelete = has_permission('produk/delete');
     }
     public function index()
     {
+        $this->perm or exit();
+
         $data['satuan'] = $this->m_satuan->findAll();
         $data['cat_produk'] = $this->m_cat_produk->findAll();
         $data['title'] = 'Produk';
@@ -73,6 +83,8 @@ class Product extends BaseController
 
     public function addProduct()
     {
+        $this->permAdd or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('produk'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/product')->withInput();
@@ -110,6 +122,8 @@ class Product extends BaseController
 
     public function getRowProduct()
     {
+        $this->request->isAJAX() or exit();
+
         $id = $this->request->getPost('id');
         $query = $this->m_produk->find($id);
         echo json_encode($query);
@@ -117,6 +131,8 @@ class Product extends BaseController
 
     public function editProduct()
     {
+        $this->permEdit or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('produk'))) {
             session()->setFlashdata('info', 'error_edit');
             return redirect()->to('/product')->withInput();
@@ -146,6 +162,8 @@ class Product extends BaseController
 
     public function deleteProduct($id)
     {
+        $this->permDelete or exit();
+
         if (!preg_match('/^[a-zA-Z0-9_]*$/', $id)) {
             session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/product');

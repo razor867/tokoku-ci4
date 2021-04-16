@@ -15,6 +15,10 @@ class Pembelian extends BaseController
     protected $m_satuan;
     protected $validation;
     protected $serversideModel;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
@@ -23,10 +27,16 @@ class Pembelian extends BaseController
         $this->m_satuan = new SatuanModel();
         $this->validation = \Config\Services::validation();
         $this->serversideModel = new Serverside_model();
+        $this->perm =  has_permission('pembelian/page');
+        $this->permAdd = has_permission('pembelian/add');
+        $this->permEdit = has_permission('pembelian/edit');
+        $this->permDelete = has_permission('pembelian/delete');
     }
 
     public function index()
     {
+        $this->perm or exit();
+
         if (has_permission('pembelian/page')) {
             $data['produk'] = $this->m_produk->getProduk();
             $data['satuan'] = $this->m_satuan->findAll();
@@ -40,6 +50,8 @@ class Pembelian extends BaseController
 
     public function addPembelian()
     {
+        $this->permAdd or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('pembelian'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/pembelian')->withInput();
@@ -69,6 +81,8 @@ class Pembelian extends BaseController
 
     public function getRowPembelian()
     {
+        $this->request->isAJAX() or exit();
+
         $id = $this->request->getPost('id');
         $query = $this->m_pembelian->find($id);
         echo json_encode($query);
@@ -76,6 +90,8 @@ class Pembelian extends BaseController
 
     public function editPembelian()
     {
+        $this->permEdit or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('pembelian'))) {
             session()->setFlashdata('info', 'error_edit');
             return redirect()->to('/pembelian')->withInput();
@@ -114,6 +130,8 @@ class Pembelian extends BaseController
 
     public function deletePembelian($id)
     {
+        $this->permDelete or exit();
+
         if (!preg_match('/^[a-zA-Z0-9_]*$/', $id)) {
             session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/pembelian');

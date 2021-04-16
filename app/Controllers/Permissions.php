@@ -8,15 +8,25 @@ class Permissions extends BaseController
 {
     protected $model_permissions;
     protected $validation;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
         $this->model_permissions = new PermissionsModel();
         $this->validation = \Config\Services::validation();
+        $this->perm =  has_permission('halpermis/page');
+        $this->permAdd = has_permission('halpermis/add');
+        $this->permEdit = has_permission('halpermis/edit');
+        $this->permDelete = has_permission('halpermis/delete');
     }
 
     public function index()
     {
+        $this->perm or exit();
+
         $data['title'] = 'Permissions';
         $data['modaltitle'] = 'Add Permission';
         $data['permissions_data'] = $this->model_permissions->findAll();
@@ -26,6 +36,8 @@ class Permissions extends BaseController
 
     public function add()
     {
+        $this->permAdd or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('add_permissions'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/permissions')->withInput();
@@ -39,6 +51,8 @@ class Permissions extends BaseController
 
     public function edit()
     {
+        $this->permEdit or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('edit_permissions'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/permissions')->withInput();
@@ -53,6 +67,7 @@ class Permissions extends BaseController
     public function get_data_edit()
     {
         $this->request->isAJAX() or exit();
+
         $data = $this->model_permissions->find($this->request->getPost('id'));
 
         echo json_encode($data);
@@ -60,6 +75,8 @@ class Permissions extends BaseController
 
     public function delete($id_permissions)
     {
+        $this->permDelete or exit();
+
         $this->model_permissions->delete($id_permissions);
         session()->setFlashdata('info', 'Permission berhasil dihapus');
         return redirect()->to('/permissions');

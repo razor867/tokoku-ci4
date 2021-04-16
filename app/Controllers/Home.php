@@ -12,13 +12,24 @@ class Home extends BaseController
 	protected $model_user;
 	protected $validation;
 	protected $config;
+	protected $permUserPage;
+	protected $permUserAdd;
+	protected $permUserEdit;
+	protected $permUserDelete;
+	protected $permProfilEdit;
 
 	public function __construct()
 	{
 		$this->model_user = new Users_model();
 		$this->validation = \Config\Services::validation();
 		$this->config = config('Auth');
+		$this->permUserPage = has_permission('users/page');
+		$this->permUserAdd = has_permission('user/add');
+		$this->permUserEdit = has_permission('user/edit');
+		$this->permUserDelete = has_permission('user/delete');
+		$this->permProfilEdit = has_permission('profil/edit');
 	}
+
 	public function index()
 	{
 		$data['title'] = 'Dashboard';
@@ -34,6 +45,8 @@ class Home extends BaseController
 
 	public function users()
 	{
+		$this->permUserPage or exit();
+
 		$data['title'] = 'Users';
 		$data['modaltitle'] = 'Add User';
 		$data['validation'] = $this->validation;
@@ -45,6 +58,8 @@ class Home extends BaseController
 
 	public function add_new_user()
 	{
+		$this->permUserAdd or exit();
+
 		if (!$this->validate($this->validation->getRuleGroup('add_user'))) {
 			session()->setFlashdata('info', 'error_add');
 			return redirect()->to('/home/users')->withInput();
@@ -63,6 +78,8 @@ class Home extends BaseController
 
 	public function edit_user()
 	{
+		$this->permProfilEdit or exit();
+
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			if (!$this->validate($this->validation->getRuleGroup('edit_user'))) {
 				session()->setFlashdata('info', 'error_add');
@@ -103,6 +120,7 @@ class Home extends BaseController
 	public function edit_user_page()
 	{
 		$this->request->isAJAX() or exit();
+
 		$data = $this->model_user->find($this->request->getPost('id_user'));
 		echo json_encode($data);
 	}
@@ -110,6 +128,7 @@ class Home extends BaseController
 	public function get_user_account()
 	{
 		$this->request->isAJAX() or exit();
+
 		$data = $this->model_user->find($this->request->getPost('id_user'));
 		$data_role = $this->model_user->getRoleById($data->id);
 		foreach ($data_role as $dr) {
@@ -120,6 +139,8 @@ class Home extends BaseController
 
 	public function edit_user_account()
 	{
+		$this->permUserEdit or exit();
+
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			if (!$this->validate($this->validation->getRuleGroup('edit_user_account'))) {
 				session()->setFlashdata('info', 'error_add');
@@ -153,6 +174,8 @@ class Home extends BaseController
 
 	public function deleteUserAccount($id_user)
 	{
+		$this->permUserDelete or exit();
+
 		$this->model_user->delete($id_user);
 		session()->setFlashdata('info', 'User Account berhasil dihapus');
 		return redirect()->to('/home/users');

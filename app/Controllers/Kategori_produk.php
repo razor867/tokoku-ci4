@@ -10,16 +10,26 @@ class Kategori_produk extends BaseController
     protected $m_cat_produk;
     protected $validation;
     protected $serversideModel;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
         $this->m_cat_produk = new KategoriProdukModel();
         $this->validation = \Config\Services::validation();
         $this->serversideModel = new Serverside_model();
+        $this->perm =  has_permission('kategori_produk/page');
+        $this->permAdd = has_permission('kategori_produk/add');
+        $this->permEdit = has_permission('kategori_produk/edit');
+        $this->permDelete = has_permission('kategori_produk/delete');
     }
 
     public function index()
     {
+        $this->perm or exit();
+
         $data['title'] = 'Kategori Produk';
         $data['validation'] = $this->validation;
         return view('/kategori_produk/v_kategori_produk', $data);
@@ -27,6 +37,8 @@ class Kategori_produk extends BaseController
 
     public function addKategori()
     {
+        $this->permAdd or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('kategori'))) {
             session()->setFlashdata('info', 'error_add');
             return redirect()->to('/kategori_produk')->withInput();
@@ -43,17 +55,17 @@ class Kategori_produk extends BaseController
 
     public function getRowKategori()
     {
-        if ($this->request->isAJAX()) {
-            $id = $this->request->getpost('id');
-            $query = $this->m_cat_produk->find($id);
-            echo json_encode($query);
-        } else {
-            return redirect()->to('/kategori_produk');
-        }
+        $this->request->isAJAX() or exit();
+
+        $id = $this->request->getpost('id');
+        $query = $this->m_cat_produk->find($id);
+        echo json_encode($query);
     }
 
     public function editKategori()
     {
+        $this->permEdit or exit();
+
         if (!$this->validate($this->validation->getRuleGroup('kategori'))) {
             session()->setFlashdata('info', 'error_edit');
             return redirect()->to('/kategori_produk')->withInput();
@@ -78,6 +90,8 @@ class Kategori_produk extends BaseController
 
     public function deleteKategori($id)
     {
+        $this->permDelete or exit();
+
         if (!preg_match('/^[0-9]*$/', $id)) {
             session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/kategori_produk');

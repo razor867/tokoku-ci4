@@ -9,15 +9,25 @@ class Satuan extends BaseController
 {
     protected $m_satuan;
     protected $serversideModel;
+    protected $perm;
+    protected $permAdd;
+    protected $permEdit;
+    protected $permDelete;
 
     public function __construct()
     {
         $this->m_satuan = new SatuanModel();
         $this->serversideModel = new Serverside_model();
+        $this->perm =  has_permission('produk/page');
+        $this->permAdd = has_permission('produk/add');
+        $this->permEdit = has_permission('produk/edit');
+        $this->permDelete = has_permission('produk/delete');
     }
 
     public function index()
     {
+        $this->perm or exit();
+
         $data['title'] = 'Satuan Produk';
         $data['validation'] = \Config\Services::validation();
         return view('satuan/v_satuan_produk', $data);
@@ -25,6 +35,8 @@ class Satuan extends BaseController
 
     public function addSatuan()
     {
+        $this->permAdd or exit();
+
         $validation =  \Config\Services::validation();
         if (!$this->validate($validation->getRuleGroup('satuan'))) {
             session()->setFlashdata('info', 'error_add');
@@ -42,17 +54,17 @@ class Satuan extends BaseController
 
     public function getRowSatuan()
     {
-        if ($this->request->isAJAX()) {
-            $id = $this->request->getpost('id');
-            $query = $this->m_satuan->find($id);
-            echo json_encode($query);
-        } else {
-            return redirect()->to('/satuan');
-        }
+        $this->request->isAJAX() or exit();
+
+        $id = $this->request->getpost('id');
+        $query = $this->m_satuan->find($id);
+        echo json_encode($query);
     }
 
     public function editSatuan()
     {
+        $this->permEdit or exit();
+
         $validation =  \Config\Services::validation();
         if (!$this->validate($validation->getRuleGroup('satuan'))) {
             session()->setFlashdata('info', 'error_edit');
@@ -78,6 +90,8 @@ class Satuan extends BaseController
 
     public function deleteSatuan($id)
     {
+        $this->permDelete or exit();
+
         if (!preg_match('/^[0-9]*$/', $id)) {
             session()->setFlashdata('info', 'error_delete');
             return redirect()->to('/satuan');
