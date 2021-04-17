@@ -51,7 +51,11 @@
                             <?php
                             $user_role = user_role_name($u->id);
                             if ($user_role == 'Super Admin') {
-                                $class_badge = 'badge-success';
+                                if (in_groups('Admin')) {
+                                    continue;
+                                } else {
+                                    $class_badge = 'badge-success';
+                                }
                             } else if ($user_role == 'Admin') {
                                 $class_badge = 'badge-info';
                             } else if ($user_role == 'Admin Kasir') {
@@ -133,6 +137,9 @@
                         <select name="roles" id="roles" class="form-control sc_select <?= ($validation->hasError('roles') ? 'is-invalid' : '') ?>" required autofocus>
                             <option value=""></option>
                             <?php foreach ($roles as $s) : ?>
+                                <?php if (in_groups('Admin') && $s->name == 'Super Admin') {
+                                    continue;
+                                } ?>
                                 <option value="<?= $s->id ?>" <?= (old('roles') == $s->id ? 'selected' : '') ?>><?= $s->name ?></option>
                             <?php endforeach ?>
                         </select>
