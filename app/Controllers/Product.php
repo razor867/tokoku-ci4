@@ -121,8 +121,8 @@ class Product extends BaseController
             'nama_produk' => $nama_produk,
             'id_cat_produk' => $category,
             'id_satuan' => $satuan,
-            'harga' => $harga,
-            'stok' => $stok
+            'harga' => ($harga == null) ? 0 : $harga,
+            'stok' => ($stok == null) ? 0 : $stok
         ];
         $this->m_produk->addProduk($data);
         session()->setFlashdata('info', 'Data berhasil disimpan');

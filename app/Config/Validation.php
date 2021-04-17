@@ -113,16 +113,14 @@ class Validation
 			]
 		],
 		'stok' => [
-			'rules' => 'required|integer',
+			'rules' => 'permit_empty|integer',
 			'errors' => [
-				'required' => 'Wajib diisi',
 				'integer' => 'Harap isi dengan angka'
 			]
 		],
 		'harga' => [
-			'rules' => 'required|integer',
+			'rules' => 'permit_empty|integer',
 			'errors' => [
-				'required' => 'Wajib diisi',
 				'integer' => 'Harap isi dengan angka'
 			]
 		],

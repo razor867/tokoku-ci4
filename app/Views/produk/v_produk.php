@@ -10,7 +10,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="background-color: #5a5c69;">
             <h6 class="m-0 font-weight-bold text-white d-inline">Daftar Produk</h6>
-            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk')) : ?>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Gudang')) : ?>
                 <a href="#" class="btn btn-primary btn-icon-split float-right add" data-toggle="modal" data-target="#product_modal">
                     <span class="icon text-white-50">
                         <i class="fas fa-flag"></i>
@@ -57,7 +57,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_cutom') ?>
-<?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk')) : ?>
+<?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Gudang')) : ?>
     <div class="modal fade" id="product_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -107,7 +107,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="stok">Stok</label>
-                                <input type="number" class="form-control <?= ($validation->hasError('stok') ? 'is-invalid' : '') ?>" id="stok" name="stok" min="0" required autofocus value="<?= old('stok') ?>">
+                                <input type="number" <?= (in_groups('Admin Gudang') ? 'disabled' : '') ?> class="form-control <?= ($validation->hasError('stok') ? 'is-invalid' : '') ?>" id="stok" name="stok" min="0" required autofocus value="<?= old('stok') ?>">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('stok') ?>
                                 </div>
@@ -115,7 +115,7 @@
                         </div>
                         <div class="form-group">
                             <label for="harga">Harga</label>
-                            <input type="number" class="form-control <?= ($validation->hasError('harga') ? 'is-invalid' : '') ?>" id="harga" name="harga" min="0" required autofocus value="<?= old('harga') ?>">
+                            <input type="number" <?= (in_groups('Admin Gudang') ? 'disabled' : '') ?> class="form-control <?= ($validation->hasError('harga') ? 'is-invalid' : '') ?>" id="harga" name="harga" min="0" required autofocus value="<?= old('harga') ?>">
                             <div class="invalid-feedback">
                                 <?= $validation->getError('harga') ?>
                             </div>

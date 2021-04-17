@@ -73,7 +73,7 @@
             </div> -->
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Kasir')) : ?>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Produk') || in_groups('Admin Kasir') || in_groups('Admin Gudang')) : ?>
                 <li class="nav-item <?= (current_url() == base_url('product') ? 'active' : '') ?>">
                     <a class="nav-link collapsed" href="/product">
                         <i class="fas fa-box"></i>
