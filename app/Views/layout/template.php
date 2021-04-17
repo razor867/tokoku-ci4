@@ -101,23 +101,25 @@
             <?php endif ?>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item <?= (current_url() == base_url('penjualan') || current_url() == base_url('pembelian') ? 'active' : '') ?>">
-                <a class="nav-link collapsed transaksi" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Transaksi</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">List data:</h6>
-                        <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) : ?>
-                            <a class="collapse-item <?= (current_url() == base_url('penjualan') ? 'active' : '') ?>" href="/penjualan">Penjualan</a>
-                        <?php endif ?>
-                        <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang')) : ?>
-                            <a class="collapse-item <?= (current_url() == base_url('pembelian') ? 'active' : '') ?>" href="/pembelian">Pembelian</a>
-                        <?php endif ?>
+            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang') || in_groups('Admin Kasir')) : ?>
+                <li class="nav-item <?= (current_url() == base_url('penjualan') || current_url() == base_url('pembelian') ? 'active' : '') ?>">
+                    <a class="nav-link collapsed transaksi" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Transaksi</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">List data:</h6>
+                            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) : ?>
+                                <a class="collapse-item <?= (current_url() == base_url('penjualan') ? 'active' : '') ?>" href="/penjualan">Penjualan</a>
+                            <?php endif ?>
+                            <?php if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Gudang')) : ?>
+                                <a class="collapse-item <?= (current_url() == base_url('pembelian') ? 'active' : '') ?>" href="/pembelian">Pembelian</a>
+                            <?php endif ?>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif ?>
 
             <!-- Divider -->
             <!-- <hr class="sidebar-divider"> -->

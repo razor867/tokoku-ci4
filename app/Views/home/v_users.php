@@ -56,6 +56,8 @@
                                 $class_badge = 'badge-info';
                             } else if ($user_role == 'Admin Kasir') {
                                 $class_badge = 'badge-warning';
+                            } else if ($user_role == 'Admin Produk') {
+                                $class_badge = 'badge-danger';
                             } else {
                                 $class_badge = 'badge-primary';
                             }
