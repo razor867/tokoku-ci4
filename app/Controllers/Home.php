@@ -4,8 +4,9 @@ namespace App\Controllers;
 
 use App\Models\Users_model;
 use Myth\Auth\Entities\User;
-
-use function PHPUnit\Framework\throwException;
+use CodeIgniter\I18n\Time;
+use App\Models\PenjualanModel;
+use App\Models\PembelianModel;
 
 class Home extends BaseController
 {
@@ -17,12 +18,16 @@ class Home extends BaseController
 	protected $permUserEdit;
 	protected $permUserDelete;
 	protected $permProfilEdit;
+	protected $model_penjualan;
+	protected $model_pembelian;
 
 	public function __construct()
 	{
 		$this->model_user = new Users_model();
 		$this->validation = \Config\Services::validation();
 		$this->config = config('Auth');
+		$this->model_penjualan = new PenjualanModel();
+		$this->model_pembelian = new PembelianModel();
 		$this->permUserPage = has_permission('users/page');
 		$this->permUserAdd = has_permission('user/add');
 		$this->permUserEdit = has_permission('user/edit');
@@ -34,9 +39,51 @@ class Home extends BaseController
 	{
 		if (in_groups('Super Admin') || in_groups('Admin')) {
 			$data['title'] = 'Dashboard';
+			$time = new Time('now', 'Asia/Jakarta', 'id_ID');
+			$time = date_format($time, 'd/m/Y');
+			$time = explode('/', $time);
+			$search = $time[1] . '/' . $time[2];
+			$total_brg_jual = count($this->model_penjualan->like('tanggal_jual', $search, 'both')->findAll());
+			$total_brg_beli = count($this->model_pembelian->like('tanggal_beli', $search, 'both')->findAll());
+
+			$data['total_penjualan'] = "Rp" . number_format($this->total_penjualan($search));
+			$data['total_pembelian'] = "Rp" . number_format($this->total_pembelian($search));
+			$data['total_brg_jual'] = $total_brg_jual;
+			$data['total_brg_beli'] = $total_brg_beli;
+
+			$bulan = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+			foreach ($bulan as $bl) {
+				$search = $bl . '/' . $time[2];
+				$total_jual_per_month[] = ($this->total_penjualan($search) != null) ? $this->total_penjualan($search) : 0;
+				$total_beli_per_month[] = ($this->total_pembelian($search) != null) ? $this->total_pembelian($search) : 0;
+			}
+
+			$data['total_jual_per_month'] = $total_jual_per_month;
+			$data['total_beli_per_month'] = $total_beli_per_month;
+
 			return view('home/v_dashboard', $data);
 		} else {
 			return redirect()->to('/home/profile');
+		}
+	}
+
+	private function total_penjualan($search)
+	{
+		$data = $this->model_penjualan->selectSum('total_jual')->like('tanggal_jual', $search, 'both')->findAll();
+		if ($data) {
+			return $data[0]->total_jual;
+		} else {
+			return null;
+		}
+	}
+
+	private function total_pembelian($search)
+	{
+		$data = $this->model_pembelian->selectSum('total_beli')->like('tanggal_beli', $search, 'both')->findAll();
+		if ($data) {
+			return $data[0]->total_beli;
+		} else {
+			return null;
 		}
 	}
 
