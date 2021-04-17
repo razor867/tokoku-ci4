@@ -140,6 +140,67 @@ function run_chart_area(info) {
   });
 }
 
+function run_pie_chart() {
+  // Pie Chart Example
+  var ctx = document.getElementById("myPieChart");
+  var myPieChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: list_cat_produk,
+      datasets: [
+        {
+          data: total_cat_produk,
+          backgroundColor: arr_color,
+          hoverBackgroundColor: arr_color,
+          hoverBorderColor: "rgba(234, 236, 244, 1)",
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: "#dddfeb",
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false,
+      },
+      cutoutPercentage: 80,
+    },
+  });
+}
+
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+var arr_color = [];
+var arr_detail_pie_chart = [];
+for (let i = 0; i < list_cat_produk.length; i++) {
+  arr_color.push(getRandomColor());
+}
+
+for (let i = 0; i < arr_color.length; i++) {
+  arr_detail_pie_chart.push(
+    '<span class="mr-2"><i class="fas fa-circle" style="color:' +
+      arr_color[i] +
+      ';"></i> ' +
+      list_cat_produk[i] +
+      "</span>"
+  );
+}
+
 $(document).ready(function () {
   var data_chart_area = false;
 
@@ -160,4 +221,9 @@ $(document).ready(function () {
   });
 
   run_chart_area(data_chart_area);
+  run_pie_chart();
+
+  for (let i = 0; i < arr_detail_pie_chart.length; i++) {
+    $(".detail_pie_chart").append(arr_detail_pie_chart[i]);
+  }
 });

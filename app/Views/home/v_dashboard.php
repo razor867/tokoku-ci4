@@ -150,16 +150,7 @@
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="myPieChart"></canvas>
                     </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Direct
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Social
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Referral
-                        </span>
+                    <div class="mt-4 text-center small detail_pie_chart">
                     </div>
                 </div>
             </div>
@@ -323,7 +314,8 @@
 <script>
     const total_jual_per_month = <?php echo json_encode($total_jual_per_month) ?>;
     const total_beli_per_month = <?php echo json_encode($total_beli_per_month) ?>;
+    const list_cat_produk = <?php echo json_encode($list_cat_produk) ?>;
+    const total_cat_produk = <?php echo json_encode($total_cat_produk) ?>;
 </script>
-<script src="/js/demo/chart-pie-demo.js"></script>
 <script src="/js/dashboard.js"></script>
 <?= $this->endSection() ?>

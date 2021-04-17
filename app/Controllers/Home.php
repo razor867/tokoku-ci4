@@ -7,6 +7,7 @@ use Myth\Auth\Entities\User;
 use CodeIgniter\I18n\Time;
 use App\Models\PenjualanModel;
 use App\Models\PembelianModel;
+use App\Models\KategoriProdukModel;
 
 class Home extends BaseController
 {
@@ -20,6 +21,7 @@ class Home extends BaseController
 	protected $permProfilEdit;
 	protected $model_penjualan;
 	protected $model_pembelian;
+	protected $model_cat_produk;
 
 	public function __construct()
 	{
@@ -28,6 +30,7 @@ class Home extends BaseController
 		$this->config = config('Auth');
 		$this->model_penjualan = new PenjualanModel();
 		$this->model_pembelian = new PembelianModel();
+		$this->model_cat_produk = new KategoriProdukModel();
 		$this->permUserPage = has_permission('users/page');
 		$this->permUserAdd = has_permission('user/add');
 		$this->permUserEdit = has_permission('user/edit');
@@ -60,6 +63,14 @@ class Home extends BaseController
 
 			$data['total_jual_per_month'] = $total_jual_per_month;
 			$data['total_beli_per_month'] = $total_beli_per_month;
+
+			$cat_produk = $this->model_cat_produk->select('nama_category')->findAll();
+			foreach ($cat_produk as $cp) {
+				$total_cat_produk[] = $this->model_cat_produk->get_total_catproduk($cp->nama_category);
+				$list_cat_produk[] = $cp->nama_category;
+			}
+			$data['total_cat_produk'] = $total_cat_produk;
+			$data['list_cat_produk'] = $list_cat_produk;
 
 			return view('home/v_dashboard', $data);
 		} else {
