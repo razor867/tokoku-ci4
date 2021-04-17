@@ -57,12 +57,14 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item <?= (current_url() == 'http://localhost:8080/' || current_url() == base_url('home') ? 'active' : '') ?>">
-                <a class="nav-link" href="/">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
+            <?php if (in_groups('Super Admin') || in_groups('Admin')) : ?>
+                <li class="nav-item <?= (current_url() == 'http://localhost:8080/' || current_url() == base_url('home') ? 'active' : '') ?>">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            <?php endif ?>
 
             <!-- Divider -->
             <!-- <hr class="sidebar-divider"> -->

@@ -32,8 +32,12 @@ class Home extends BaseController
 
 	public function index()
 	{
-		$data['title'] = 'Dashboard';
-		return view('home/v_dashboard', $data);
+		if (in_groups('Super Admin') || in_groups('Admin')) {
+			$data['title'] = 'Dashboard';
+			return view('home/v_dashboard', $data);
+		} else {
+			return redirect()->to('/home/profile');
+		}
 	}
 
 	public function profile()
