@@ -80,7 +80,7 @@
 
 <?= $this->section('js_custom') ?>
 <script src="/js/demo/datatables-demo.js"></script>
-<!-- <script src="/js/groups.js"></script> -->
+<script src="/js/groups_perm.js"></script>
 <script>
     $(document).ready(function() {
         $(".edit").click(function() {

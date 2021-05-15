@@ -40,10 +40,10 @@
                                 <td><?= $p->name ?></td>
                                 <td><?= $p->description ?></td>
                                 <td>
-                                    <a href="javascript:void(0)" data="<?= $p->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#addGroups" title="Edit">
+                                    <a href="javascript:void(0)" data="<?= $p->id ?>" class="btn btn-sm btn-warning btn-circle edit" data-toggle="modal" data-target="#addGroups" title="Edit">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="btn btn-danger btn-circle delete" onclick="deleteData('_groups','<?= $p->id ?>')" title="Delete">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-danger btn-circle delete" onclick="deleteData('_groups','<?= $p->id ?>')" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>

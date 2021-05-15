@@ -19,7 +19,7 @@
                 </a>
             <?php endif ?>
         </div>
-        <div class="card-body" style="overflow-y: scroll; height:400px;">
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" data-url="/product/listdata" width="100%" cellspacing="0">
                     <thead>

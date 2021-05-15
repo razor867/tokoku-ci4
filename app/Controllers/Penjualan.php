@@ -157,10 +157,10 @@ class Penjualan extends BaseController
         // $no = $this->request->getPost('start');
         foreach ($list as $lt) {
             if (in_groups('Super Admin') || in_groups('Admin') || in_groups('Admin Kasir')) {
-                $button_action = '<a href="#" class="btn btn-warning btn-circle edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
+                $button_action = '<a href="#" class="btn btn-warning btn-circle btn-sm edit" onclick="edit(\'' . $lt->id . '\')" data-toggle="modal" data-target="#penjualan_modal" title="Edit">
                                 <i class="fas fa-exclamation-triangle"></i>
                               </a>
-                              <a href="#" class="btn btn-danger btn-circle delete" onclick="deleteData(\'_datpen\',\'' . $lt->id . '\')" title="Delete">
+                              <a href="#" class="btn btn-danger btn-circle btn-sm delete" onclick="deleteData(\'_datpen\',\'' . $lt->id . '\')" title="Delete">
                                 <i class="fas fa-trash"></i>
                               </a>';
             }

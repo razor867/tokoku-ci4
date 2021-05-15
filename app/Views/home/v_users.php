@@ -72,10 +72,10 @@
                                 <td><?= $u->email ?></td>
                                 <td><span class="badge <?= $class_badge ?>"><?= $user_role ?></span></td>
                                 <td>
-                                    <a href="javascript:void(0)" data="<?= $u->id ?>" class="btn btn-warning btn-circle edit" data-toggle="modal" data-target="#addUserModal" title="Edit">
+                                    <a href="javascript:void(0)" data="<?= $u->id ?>" class="btn btn-sm btn-warning btn-circle edit" data-toggle="modal" data-target="#addUserModal" title="Edit">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="btn btn-danger btn-circle delete" onclick="deleteData('_datusers','<?= $u->id ?>')" title="Delete">
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-circle delete" onclick="deleteData('_datusers','<?= $u->id ?>')" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>

@@ -31,6 +31,23 @@
             color: #fff;
             opacity: 1;
         }
+
+        th,td {
+            font-size: 14px;
+        }
+
+        .dt-buttons {
+            margin-bottom: 1rem!important;
+        }
+
+        .dataTables_length {
+            margin-right: 20px;
+            display: inline;
+        }
+        
+        .dataTables_info {
+            display: inline;
+        }
     </style>
 
     <link rel="icon" type="image/png" href="/img/tokoku.png" />
